@@ -35,9 +35,17 @@ export default function Match(props) {
                     <div key={match._id} className="container match-row" onClick={togglePopup}>
                         <p>{convertISOtoLocalDate(match.date)}</p>
                         <p>{match.homeTeam}<b>
+                        {
+                            props.isMatchUpdating === true ?
+                            //TODO: Make this a small animated spinner
+                            <span> ? - ? </span> :
+                            null
+                        }
                         { match.hasOwnProperty('actlHomeScore') ?
+                        //TODO: Make this span red when match is ongoing
                             <span> {match.actlHomeScore} - {match.actlAwayScore} </span> :
-                            <span> - </span>
+                            props.isMatchUpdating === true ?
+                            null : <span> - </span>
                         }
                         </b>{match.awayTeam}</p>
                         <p className={

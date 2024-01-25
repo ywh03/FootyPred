@@ -26,7 +26,6 @@ function getCurrentDate() {
 }
 
 async function getMatchResults(matchUrl) {
-    console.log(matchUrl);
     const browser = await launchPuppeteer();
     const page = await browser.newPage();
     await page.setViewport({width: 1800, height: 2500});
@@ -38,25 +37,29 @@ async function getMatchResults(matchUrl) {
     })
 
     const result = await page.evaluate(() => {
-        const scoreField = document.querySelector('div.relative.px-\\[12px\\].flex.max-mm\\:flex-col.w-auto.min-sm\\:w-full.pb-5.pt-5.min-mm\\:items-center.font-semibold.text-\\[22px\\].text-black-main.gap-2.border-b.border-black-borders.font-secondary');
-        const scores = scoreField.querySelectorAll('div.max-mm\\:gap-2>div.flex-wrap.gap-2>div');
-        let matchStatus = "Completed";
-        if (scores.length === 0 || scores[0].textContent === '') matchStatus = "Uncommenced";
-        else if (scores[0].classList.contains("text-red-dark")) matchStatus = "Ongoing";
-        const homeTeamScore = scores[0].textContent;
-        const awayTeamScore = scores[1].textContent;
-        const data = {
-            actlHomeTeamScore: homeTeamScore,
-            actlAwayTeamScore: awayTeamScore,
-            matchStatus: matchStatus
+        console.log("Starting to get match results.");
+        try {
+            const scoreField = document.querySelector('div.relative.px-\\[12px\\].flex.max-mm\\:flex-col.w-auto.min-sm\\:w-full.pb-5.pt-5.min-mm\\:items-center.font-semibold.text-\\[22px\\].text-black-main.gap-2.border-b.border-black-borders.font-secondary');
+            const scores = scoreField.querySelectorAll('div.max-mm\\:gap-2>div.flex-wrap.gap-2');
+            let matchStatus = "Completed";
+            if (scores.length === 0 || scores[0].textContent === '') matchStatus = "Uncommenced";
+            else if (scores[0].classList.contains("text-red-dark")) matchStatus = "Ongoing";
+            const homeTeamScore = scores[0].textContent;
+            const awayTeamScore = scores[1].textContent;
+            const data = {
+                actlHomeTeamScore: homeTeamScore,
+                actlAwayTeamScore: awayTeamScore,
+                matchStatus: matchStatus
+            }
+            if (matchStatus === "Ongoing") {
+                const matchTime = document.querySelector('.result-live+div');
+                data.matchTime = matchTime.textContent;
+            }
+            return data;
+        } catch (err) {
+            console.log("Error: " + err);
         }
-        if (matchStatus === "Ongoing") {
-            const matchTime = document.querySelector('.result-live+div');
-            data.matchTime = matchTime.textContent;
-        }
-        return data;
     })
-    //console.log(result);
     await browser.close();
     return result;
 }
@@ -67,16 +70,17 @@ async function getMatches(league, type) {
     else leagueUrl = oddsportalLeaguesUrlsMap[league] + "/results/";
     const browser = await launchPuppeteer();
     const page = await browser.newPage();
+    console.log(leagueUrl);
     await page.setViewport({width: 1800, height: 2500});
-    await page.goto(leagueUrl, {waitUntil: 'domcontentloaded'});
-    await page.waitForSelector('div.eventRow.flex.w-full.flex-col.text-xs');
+    await page.goto(leagueUrl, {waitUntil: 'load'});
+    //await page.waitForSelector('div.eventRow.flex.w-full.flex-col.text-xs');
+    console.log("League loaded " + leagueUrl);
 
     page.on('console', (message) => {
         console.log("Console message: " + message.text());
     });
 
     const data = await page.evaluate((league, remappedTeamNames) => {
-
         function dateToISOString(date, time) {
             const dateParts = date.split(" ");
             const monthAbbreviation = dateParts[1];
@@ -112,7 +116,8 @@ async function getMatches(league, type) {
                 dates.push(date);
                 currentDate = date;
             }
-            const realMatchBlock = matchBlock.querySelector('a.border-black-borders.flex.cursor-pointer.flex-col.border-b');
+            //TODO: realMatchBlock not found
+            const realMatchBlock = matchBlock.querySelector('a.border-black-borders.flex.flex-col.border-b');
             const oddsportalUrl = realMatchBlock.href;
             const timeField = realMatchBlock.querySelector('div.next-m\\:flex-col.min-md\\:flex-row.min-md\\:gap-1.text-gray-dark.flex.flex-row.self-center.text-\\[12px\\].w-full');
             const time = timeField.textContent;

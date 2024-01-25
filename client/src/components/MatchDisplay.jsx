@@ -7,13 +7,14 @@ const HOUR_DIFF = 2;
 function MatchDisplay() {
 
     const [allMatches, setAllMatches] = React.useState();
+    const [isMatchUpdating, setMatchUpdating] = React.useState({});
     const [isMatchesLoading, setMatchesLoading] = React.useState(true);
     const [isFetchComplete, setFetchComplete] = React.useState(false);
 
     async function getAllMatches() {
         const matches = await axios.get('http://localhost:9000/matches');
         console.log(matches);
-        setAllMatches(matches);
+        setAllMatches(matches.data);
         setMatchesLoading(false);
         setFetchComplete(true);
         console.log("Fetch complete")
@@ -28,29 +29,44 @@ function MatchDisplay() {
         return false;
     }
 
+    //DONE: Make sure state updates without requiring a refresh
     async function updateMatch(matchId, index) {
-        const matchResults = await axios.post('http://localhost:9000/matches', {"matchId": matchId});
+        let tempMatchUpdating = {...isMatchUpdating};
+        tempMatchUpdating[index] = true;
+        setMatchUpdating(tempMatchUpdating);
+        const rawMatchResults = await axios.post('http://localhost:9000/matches', {"matchId": matchId});
+        const matchResults = rawMatchResults.data;
+        console.log(matchResults);
         if (matchResults.matchStatus === "Completed") {
             setAllMatches((prevArray) => {
+                console.log(prevArray);
+                console.log(index);
                 const updatedArray = [...prevArray];
-                const object = {...updatedArray[index], actlHomeScore: matchResults.homeScore, actlAwayScore: matchResults.awayScore};
+                //const object = {...updatedArray[index], actlHomeTeamScore: matchResults.actlHomeTeamScore, actlAwayTeamScore: matchResults.actlAwayTeamScore};
+                const object = updatedArray[index];
+                object.actlHomeScore = matchResults.actlHomeTeamScore;
+                object.actlAwayScore = matchResults.actlAwayTeamScore;
                 updatedArray[index] = object;
+                console.log(updatedArray);
                 return updatedArray;
             });
         }
         else if (matchResults.matchStatus === "Ongoing") {
             setAllMatches((prevArray) => {
                 const updatedArray = [...prevArray];
-                const object = {...updatedArray[index], actlHomeScore: matchResults.homeScore, actlAwayScore: matchResults.awayScore, matchTime: matchResults.matchTime};
+                const object = {...updatedArray[index], actlHomeTeamScore: matchResults.actlHomeTeamScore, actlAwayTeamScore: matchResults.actlAwayTeamScore, matchTime: matchResults.matchTime};
                 updatedArray[index] = object;
                 return updatedArray;
             });
         }
+        tempMatchUpdating = {...isMatchUpdating};
+        tempMatchUpdating[index] = false;
+        setMatchUpdating(tempMatchUpdating);
     }
 
     async function checkMatchesForUpdates() {
         //console.log(allMatches.data);
-        for (const [index, match] of allMatches.data.entries()) {
+        for (const [index, match] of allMatches.entries()) {
             //console.log(match);
             const matchDate = match.date;
             if (compareDate(matchDate) && !match.hasOwnProperty("actlHomeScore")) {
@@ -94,9 +110,9 @@ function MatchDisplay() {
                 </div> 
                 ) : (
                 <div>
-                { allMatches.data.map(function(match) {
+                { allMatches.map(function(match, index) {
                     return (
-                        <Match matchDetails={match} />
+                        <Match matchDetails={match} isMatchUpdating={isMatchUpdating[index]} />
                     )
                 })}
                 </div>

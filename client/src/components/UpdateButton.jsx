@@ -9,8 +9,9 @@ export default function UpdateButton() {
         setUpdating(true);
         const nextMatches = await axios.get('http://localhost:9000/scrape/nextMatches');
         console.log("Next matches found; adding next");
-        console.log(nextMatches.data);
-        await axios.post('http://localhost:9000/matches/checkMatchesAndAdd', {matches: nextMatches.data});
+        //console.log(nextMatches.data);
+        const matchUpdateStatus = await axios.post('http://localhost:9000/matches/checkMatchesAndAdd', {matches: nextMatches.data});
+        console.log(matchUpdateStatus.data.status);
         setUpdating(false);
     }
 

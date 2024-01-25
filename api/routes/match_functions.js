@@ -4,6 +4,8 @@ import fs from 'fs';
 import { DateTime } from 'luxon';
 import { getMatchResults } from './oddsportal_scrapers.js';
 
+//TODO: update react state right after getting new results
+
 const router = express.Router();
 
 const matchSchema = new mongoose.Schema({
@@ -110,11 +112,10 @@ async function getUpdatedMatchScore(matchId) {
         _id: matchId,
     }
     const match = await Match.findOne(query);
-    console.log(match);
     const oddsportalUrl = match.oddsportalUrl;
     const matchResults = await getMatchResults(oddsportalUrl);
     if (matchResults.matchStatus === "Completed") {
-        addResults(matchId, matchResults.homeScore, matchResults.awayScore);
+        addResults(matchId, matchResults.actlHomeTeamScore, matchResults.actlAwayTeamScore);
     }
     return matchResults;
 }
@@ -128,7 +129,6 @@ router.get('/', async function(req, res, next) {
 //UPDATE MATCH
 router.post('/', async function(req, res, next) {
     const matchId = req.body.matchId;
-    console.log(matchId);
     const matchResults = await getUpdatedMatchScore(matchId);
     return res.json(matchResults);
 })
@@ -146,14 +146,17 @@ router.post('/updatepred', async function(req, res, next) {
 })
 
 router.post('/checkMatchesAndAdd', async function(req, res, next) {
-    console.log("Headers: " + req.headers['content-type']);
-    console.log("Body: " + JSON.stringify(req.body, null, 2));
-    for (const match of req.body.matches) { //req.body should be an array of matches
-        console.log(match);
-        const matchFromDB = await queryMatch(match.date, match.homeTeam, match.awayTeam);
-        console.log(matchFromDB);
-        if (matchFromDB) continue;
-        else newMatch(match.scrapedAt, match.date, match.homeTeam, match.awayTeam, match.homeProb, match.drawProb, match.awayProb, match.leagueName, match.oddsportalUrl);
+    //console.log("Headers: " + req.headers['content-type']);
+    //console.log("Body: " + JSON.stringify(req.body, null, 2));
+    try {
+        for (const match of req.body.matches) { //req.body should be an array of matches
+            const matchFromDB = await queryMatch(match.date, match.homeTeam, match.awayTeam);
+            if (matchFromDB) continue;
+            else newMatch(match.scrapedAt, match.date, match.homeTeam, match.awayTeam, match.homeProb, match.drawProb, match.awayProb, match.leagueName, match.oddsportalUrl);
+        }
+        return res.send({"status": "Matches successfully added to database."});
+    } catch (err) {
+        return res.send({"status": "Failed to add matches to database; " + err});
     }
 })
 
