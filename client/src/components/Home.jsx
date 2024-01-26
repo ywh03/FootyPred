@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import NavBar from "./NavBar.jsx";
 import UpdateButton from "./UpdateButton.jsx";
 import MatchDisplay from "./MatchDisplay.jsx";
@@ -9,12 +10,31 @@ import MatchDisplay from "./MatchDisplay.jsx";
 //TODO: Implement a stats page
 
 export default function Home() {
+    const [isLoading, setLoading] = React.useState(true);
+    const [upcomingMatches, setUpcomingMatches] = React.useState();
+
+    async function getPastMatches() {
+        const rawUpcomingMatches = await axios.get('http://localhost:9000/matches/upcomingmatches');
+        setUpcomingMatches(rawUpcomingMatches.data);
+        setLoading(false);
+    }
+
+    React.useEffect(() => {
+        getPastMatches();
+    }, [])
+
     return (
         <div>
             <NavBar />
-            <h1>Matches</h1>
+            <h1>Upcoming Matches</h1>
             <UpdateButton />
-            <MatchDisplay wantHidden={false} />
+            {
+                isLoading ? (
+                    <h2>Matches Loading...</h2>
+                ) : (
+                    <MatchDisplay isPast={false} wantHidden={false} matches={upcomingMatches} setMatches={setUpcomingMatches} />
+                )
+            }
         </div>
     )
 }

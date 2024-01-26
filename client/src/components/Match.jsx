@@ -40,7 +40,7 @@ export default function Match(props) {
                         <p>Matches Loading...</p>
                     </div>
                 ) : (
-                    <div key={match._id} className="container match-row" onClick={togglePopup}>
+                    <div key={match._id} className="match-row" onClick={togglePopup}>
                         <button onClick={delMatch}> {props.wantHidden ? "+" : "-"} </button>
                         <p>{convertISOtoLocalDate(match.date)}</p>
                         <p>{match.homeTeam}<b>

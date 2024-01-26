@@ -1,10 +1,12 @@
 import React from 'react';
 import Home from './Home.jsx';
+import PastMatches from './PastMatches.jsx';
 import DeletedMatches from './DeletedMatches.jsx';
 import {createBrowserRouter, RouterProvider, Routes, Route, Link} from "react-router-dom";
 
 const router = createBrowserRouter([
     { path: "/", Component: Home },
+    { path: "/pastmatches", Component: PastMatches },
     { path: "/deletedmatches", Component: DeletedMatches },
     { path: "*", Component: Root },
 ]);

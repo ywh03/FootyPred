@@ -1,15 +1,37 @@
 import React from "react";
+import axios from "axios";
 import NavBar from "./NavBar.jsx";
 import UpdateButton from "./UpdateButton.jsx";
 import MatchDisplay from "./MatchDisplay.jsx";
 
-export default function Home() {
+//TODO: remove deleted matches that have already passed
+
+export default function DeletedMatches() {
+    const [isLoading, setLoading] = React.useState(true);
+    const [deletedMatches, setDeletedMatches] = React.useState();
+
+    async function getDeletedMatches() {
+        const rawDeletedMatches = await axios.get('http://localhost:9000/matches/deletedmatches');
+        setDeletedMatches(rawDeletedMatches.data);
+        setLoading(false);
+    }
+
+    React.useEffect(() => {
+        getDeletedMatches();
+    }, [])
+
     return (
         <div>
             <NavBar />
-            <h1>DeletedMatches</h1>
+            <h1>Past Matches</h1>
             <UpdateButton />
-            <MatchDisplay wantHidden={true} />
+            {
+                isLoading ? (
+                    <h2>Matches Loading...</h2>
+                ) : (
+                    <MatchDisplay isPast={false} wantHidden={true} matches={deletedMatches} setMatches={setDeletedMatches} />
+                )
+            }
         </div>
     )
 }

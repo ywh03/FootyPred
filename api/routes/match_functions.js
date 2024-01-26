@@ -6,6 +6,7 @@ import { getMatchResults } from './oddsportal_scrapers.js';
 
 //TODO: update react state right after getting new results
 
+const UPCOMINGOFFSETDAYS = 2;
 const router = express.Router();
 
 const matchSchema = new mongoose.Schema({
@@ -35,6 +36,13 @@ const matchSchema = new mongoose.Schema({
 const Match = mongoose.model("Match", matchSchema);
 
 //TODO: Implement a system where the user can input a oddsportal url (or even better just the details of the match) and the match is added
+
+function getOffsetCurrentISODate(offsetDays) {
+    const currentDate = new Date();
+    const offsetDate = new Date(currentDate);
+    offsetDate.setDate(currentDate.getDate() - offsetDays);
+    return offsetDate.toISOString();
+}
 
 async function newMatch(scrapedAt, date, homeTeam, awayTeam, homeProb, drawProb, awayProb, leagueName, oddsportalUrl) {
     const customId = `${date}-${homeTeam}-${awayTeam}`;
@@ -191,9 +199,47 @@ router.post('/toggleMatch', async function(req, res, next) {
     } catch (err) {
         res.send({"status": "Failed to toggle match status; " + err});
     }
-    
 })
 
+router.get('/pastMatches', async function(req, res, next) {
+    try {
+        const currentDate = getOffsetCurrentISODate(0);
+        const query = {
+            _id: {$lt: currentDate},
+            hidden: false,
+        }
+        const pastMatches = await Match.find(query);
+        res.json(pastMatches);
+    } catch (err) {
+        console.log("Failed to get past matches: " + err);
+    }
+})
+
+router.get('/upcomingMatches', async function(req, res, next) {
+    try {
+        const offsetDate = getOffsetCurrentISODate(UPCOMINGOFFSETDAYS);
+        const query = {
+            _id: {$gt: offsetDate},
+            hidden: false,
+        }
+        const upcomingMatches = await Match.find(query);
+        res.json(upcomingMatches);
+    } catch (err) {
+        console.log("Failed to get upcomign matches: " + err);
+    }
+})
+
+router.get('/deletedMatches', async function(req, res, next) {
+    try {
+        const query = {
+            hidden: true,
+        }
+        const deletedMatches = await Match.find(query);
+        res.json(deletedMatches);
+    } catch (err) {
+        console.log("Failed to get deleted matches: " + err);
+    }
+})
 
 export default router;
 export {newMatch, addPredictions, addResults, queryMatch, getAllMatches, getUpdatedMatchScore};
