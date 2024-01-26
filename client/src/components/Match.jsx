@@ -41,7 +41,7 @@ export default function Match(props) {
                     </div>
                 ) : (
                     <div key={match._id} className="container match-row" onClick={togglePopup}>
-                        <button onClick={delMatch}> - </button>
+                        <button onClick={delMatch}> {props.wantHidden ? "+" : "-"} </button>
                         <p>{convertISOtoLocalDate(match.date)}</p>
                         <p>{match.homeTeam}<b>
                         {

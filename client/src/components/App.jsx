@@ -1,13 +1,23 @@
 import React from 'react';
-import MatchDisplay from './MatchDisplay';
-import UpdateButton from './UpdateButton';
+import Home from './Home.jsx';
+import DeletedMatches from './DeletedMatches.jsx';
+import {createBrowserRouter, RouterProvider, Routes, Route, Link} from "react-router-dom";
 
-export default function App(){
+const router = createBrowserRouter([
+    { path: "/", Component: Home },
+    { path: "/deletedmatches", Component: DeletedMatches },
+    { path: "*", Component: Root },
+]);
+
+export default function App() {
+    return <RouterProvider router={router} />;
+}
+
+function Root(){
     return (
-        <div>
-            <h1>Test</h1>
-            <UpdateButton />
-            <MatchDisplay />
-        </div>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/deletedmatches" element={<DeletedMatches />} />
+        </Routes>
     )
 }

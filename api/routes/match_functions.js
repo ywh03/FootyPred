@@ -122,20 +122,20 @@ async function getUpdatedMatchScore(matchId) {
     return matchResults;
 }
 
-async function hideMatch(matchId) {
+async function toggleMatch(matchId, updatedHidden) {
     const query = {
         _id: matchId,
     }
     const updateOperation = {
         $set: {
-            hidden: true,
+            hidden: updatedHidden,
         }
     }
     const updatedMatch = await Match.findOneAndUpdate(query, updateOperation);
     if (!updatedMatch) {
         console.log("Match not found or updated.");
     } else {
-        console.log("Match updated successfully.");
+        console.log("Match status updated successfully.");
     }
 }
 
@@ -183,13 +183,13 @@ router.post('/checkMatchesAndAdd', async function(req, res, next) {
     }
 })
 
-router.post('/hideMatch', async function(req, res, next) {
+router.post('/toggleMatch', async function(req, res, next) {
     try {
-        await hideMatch(req.body.matchId);
-        console.log("Match successfully hidden");
-        res.send({"status": "Match successfully hidden"});
+        await toggleMatch(req.body.matchId, req.body.updatedHidden);
+        console.log("Match hidden status successfully toggled");
+        res.send({"status": "Match hidden status successfully toggled"});
     } catch (err) {
-        res.send({"status": "Failed to hide match; " + err});
+        res.send({"status": "Failed to toggle match status; " + err});
     }
     
 })

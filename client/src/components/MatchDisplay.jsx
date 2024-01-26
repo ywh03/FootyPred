@@ -4,7 +4,7 @@ import Match from "./Match.jsx";
 
 const HOUR_DIFF = 2;
 
-function MatchDisplay() {
+function MatchDisplay(props) {
 
     const [allMatches, setAllMatches] = React.useState();
     const [isMatchUpdating, setMatchUpdating] = React.useState({});
@@ -70,13 +70,13 @@ function MatchDisplay() {
         }
     }
 
-    async function removeMatch(matchId, index) {
-        await axios.post('http://localhost:9000/matches/hideMatch', {"matchId": matchId});
+    async function toggleMatch(matchId, index) {
+        await axios.post('http://localhost:9000/matches/toggleMatch', {"matchId": matchId, "updatedHidden": !props.wantHidden});
         console.log("Match " + matchId + " hidden in database");
         setAllMatches((prevArray) => {
             const updatedArray = [...prevArray];
             const object = updatedArray[index];
-            object.hidden = true;
+            object.hidden = !object.hidden;
             updatedArray[index] = object;
             return updatedArray;
         })
@@ -103,7 +103,7 @@ function MatchDisplay() {
     return (
         <div className="match-table">
             <div className="match-table-column-headings match-row">
-                <p>Remove</p>
+                { props.wantHidden ? <p>Add</p> : <p>Remove</p> }
                 <p>Date & Time</p>
                 <p>Match</p>
                 <p>Predictions</p>
@@ -118,8 +118,8 @@ function MatchDisplay() {
                 ) : (
                 <div>
                 { allMatches.map(function(match, index) {
-                    return !match.hidden ? (
-                        <Match matchDetails={match} index={index} removeMatch={removeMatch} isMatchUpdating={isMatchUpdating[index]} />
+                    return (!props.wantHidden && !match.hidden) || (props.wantHidden && match.hidden) ? (
+                        <Match matchDetails={match} index={index} removeMatch={toggleMatch} isMatchUpdating={isMatchUpdating[index]} wantHidden={props.wantHidden} />
                     ) : null
                 })}
                 </div>
