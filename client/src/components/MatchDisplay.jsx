@@ -13,7 +13,6 @@ function MatchDisplay() {
 
     async function getAllMatches() {
         const matches = await axios.get('http://localhost:9000/matches');
-        console.log(matches);
         setAllMatches(matches.data);
         setMatchesLoading(false);
         setFetchComplete(true);
@@ -36,18 +35,14 @@ function MatchDisplay() {
         setMatchUpdating(tempMatchUpdating);
         const rawMatchResults = await axios.post('http://localhost:9000/matches', {"matchId": matchId});
         const matchResults = rawMatchResults.data;
-        console.log(matchResults);
         if (matchResults.matchStatus === "Completed") {
             setAllMatches((prevArray) => {
-                console.log(prevArray);
-                console.log(index);
                 const updatedArray = [...prevArray];
                 //const object = {...updatedArray[index], actlHomeTeamScore: matchResults.actlHomeTeamScore, actlAwayTeamScore: matchResults.actlAwayTeamScore};
                 const object = updatedArray[index];
                 object.actlHomeScore = matchResults.actlHomeTeamScore;
                 object.actlAwayScore = matchResults.actlAwayTeamScore;
                 updatedArray[index] = object;
-                console.log(updatedArray);
                 return updatedArray;
             });
         }
@@ -70,10 +65,21 @@ function MatchDisplay() {
             //console.log(match);
             const matchDate = match.date;
             if (compareDate(matchDate) && !match.hasOwnProperty("actlHomeScore")) {
-                console.log(match._id);
                 updateMatch(match._id, index);
             }
         }
+    }
+
+    async function removeMatch(matchId, index) {
+        await axios.post('http://localhost:9000/matches/hideMatch', {"matchId": matchId});
+        console.log("Match " + matchId + " hidden in database");
+        setAllMatches((prevArray) => {
+            const updatedArray = [...prevArray];
+            const object = updatedArray[index];
+            object.hidden = true;
+            updatedArray[index] = object;
+            return updatedArray;
+        })
     }
 
     React.useEffect(() => {
@@ -97,6 +103,7 @@ function MatchDisplay() {
     return (
         <div className="match-table">
             <div className="match-table-column-headings match-row">
+                <p>Remove</p>
                 <p>Date & Time</p>
                 <p>Match</p>
                 <p>Predictions</p>
@@ -111,9 +118,9 @@ function MatchDisplay() {
                 ) : (
                 <div>
                 { allMatches.map(function(match, index) {
-                    return (
-                        <Match matchDetails={match} isMatchUpdating={isMatchUpdating[index]} />
-                    )
+                    return !match.hidden ? (
+                        <Match matchDetails={match} index={index} removeMatch={removeMatch} isMatchUpdating={isMatchUpdating[index]} />
+                    ) : null
                 })}
                 </div>
                 )

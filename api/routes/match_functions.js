@@ -26,7 +26,10 @@ const matchSchema = new mongoose.Schema({
     exactGuess: Boolean,
     fotmobUrl: String,
     oddsportalUrl: String,
-    isPredicting: Boolean,
+    hidden: {
+        type: Boolean, 
+        default: false,
+    }
 })
 
 const Match = mongoose.model("Match", matchSchema);
@@ -58,7 +61,6 @@ async function queryMatch(date, homeTeam, awayTeam) {
         _id: matchId,
     }
     const queriedMatch = await Match.findOne(query);
-    console.log(queriedMatch);
     if (queriedMatch) {
         return queriedMatch.toJSON();
     }
@@ -120,6 +122,23 @@ async function getUpdatedMatchScore(matchId) {
     return matchResults;
 }
 
+async function hideMatch(matchId) {
+    const query = {
+        _id: matchId,
+    }
+    const updateOperation = {
+        $set: {
+            hidden: true,
+        }
+    }
+    const updatedMatch = await Match.findOneAndUpdate(query, updateOperation);
+    if (!updatedMatch) {
+        console.log("Match not found or updated.");
+    } else {
+        console.log("Match updated successfully.");
+    }
+}
+
 //GET ALL MATCHES
 router.get('/', async function(req, res, next) {
     const allMatches = await getAllMatches();
@@ -152,12 +171,27 @@ router.post('/checkMatchesAndAdd', async function(req, res, next) {
         for (const match of req.body.matches) { //req.body should be an array of matches
             const matchFromDB = await queryMatch(match.date, match.homeTeam, match.awayTeam);
             if (matchFromDB) continue;
+            else if (!match.hasOwnProperty("homeProb")){
+                console.log("Match missing probs: " + match.date + match.homeTeam + match.awayTeam);
+                continue;
+            }
             else newMatch(match.scrapedAt, match.date, match.homeTeam, match.awayTeam, match.homeProb, match.drawProb, match.awayProb, match.leagueName, match.oddsportalUrl);
         }
         return res.send({"status": "Matches successfully added to database."});
     } catch (err) {
         return res.send({"status": "Failed to add matches to database; " + err});
     }
+})
+
+router.post('/hideMatch', async function(req, res, next) {
+    try {
+        await hideMatch(req.body.matchId);
+        console.log("Match successfully hidden");
+        res.send({"status": "Match successfully hidden"});
+    } catch (err) {
+        res.send({"status": "Failed to hide match; " + err});
+    }
+    
 })
 
 

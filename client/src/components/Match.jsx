@@ -1,6 +1,8 @@
 import React from "react";
 import MatchPopup from "./MatchPopup";
 
+//TODO: Remove match button to remove the match (and add it to a removed match db that expires after the match occurs)
+
 export default function Match(props) {
 
     const [match, setMatch] = React.useState();
@@ -24,6 +26,12 @@ export default function Match(props) {
         setPopupOpen(!popupOpen);
     }
 
+    async function delMatch(event) {
+        const matchId = props.matchDetails._id;
+        event.stopPropagation();
+        await props.removeMatch(matchId, props.index);
+    }
+
     return (
         <div>
             {
@@ -33,6 +41,7 @@ export default function Match(props) {
                     </div>
                 ) : (
                     <div key={match._id} className="container match-row" onClick={togglePopup}>
+                        <button onClick={delMatch}> - </button>
                         <p>{convertISOtoLocalDate(match.date)}</p>
                         <p>{match.homeTeam}<b>
                         {

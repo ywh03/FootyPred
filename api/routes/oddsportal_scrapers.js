@@ -70,7 +70,6 @@ async function getMatches(league, type) {
     else leagueUrl = oddsportalLeaguesUrlsMap[league] + "/results/";
     const browser = await launchPuppeteer();
     const page = await browser.newPage();
-    console.log(leagueUrl);
     await page.setViewport({width: 1800, height: 2500});
     await page.goto(leagueUrl, {waitUntil: 'load'});
     //await page.waitForSelector('div.eventRow.flex.w-full.flex-col.text-xs');
