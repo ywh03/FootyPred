@@ -10,11 +10,17 @@ export default function NavBar () {
             </button>
             <div className="collapse navbar-collapse" id="navbarText">
                 <ul className="navbar-nav mr-auto">
-                    <li className="nav-item active">
+                     <li className="nav-item active">
+                        <a className="nav-link" href="/">Active matches</a>
                     </li>
+                    <li className="nav-item">
                         <a className="nav-link" href="deletedmatches">Deleted Matches</a>
+                    </li>
                     <li className="nav-item">
                         <a className="nav-link" href="#">Followed Teams</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link" href="#">Statistics</a>
                     </li>
                 </ul>
             </div>
