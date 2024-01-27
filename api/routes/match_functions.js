@@ -4,8 +4,6 @@ import fs from 'fs';
 import { DateTime } from 'luxon';
 import { getMatchResults } from './oddsportal_scrapers.js';
 
-//TODO: update react state right after getting new results
-
 const UPCOMINGOFFSETDAYS = 2;
 const router = express.Router();
 

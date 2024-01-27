@@ -17,13 +17,13 @@ export default function NavBar () {
                         <a className="nav-link" href="/pastmatches">Past matches</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="deletedmatches">Deleted Matches</a>
+                        <a className="nav-link" href="/deletedmatches">Deleted Matches</a>
                     </li>
                     <li className="nav-item">
                         <a className="nav-link" href="#">Followed Teams</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="#">Statistics</a>
+                        <a className="nav-link" href="/stats">Statistics</a>
                     </li>
                 </ul>
             </div>

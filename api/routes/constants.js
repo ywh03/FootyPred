@@ -37,7 +37,7 @@ const followedTeams = [
     "Liverpool"
 ]
 
-//TODO: IMPLEMENT A REMAP TEAM NAME FUNCTION
+//DONE: IMPLEMENT A REMAP TEAM NAME FUNCTION
 const remappedTeamNames = {
     "Nottingham": "Nottingham Forest",
     "Luton": "Luton Town",

@@ -115,7 +115,7 @@ async function getMatches(league, type) {
                 dates.push(date);
                 currentDate = date;
             }
-            //TODO: realMatchBlock not found
+            //NOTE: realMatchBlock not found
             const realMatchBlock = matchBlock.querySelector('a.border-black-borders.flex.flex-col.border-b');
             const oddsportalUrl = realMatchBlock.href;
             const timeField = realMatchBlock.querySelector('div.next-m\\:flex-col.min-md\\:flex-row.min-md\\:gap-1.text-gray-dark.flex.flex-row.self-center.text-\\[12px\\].w-full');
