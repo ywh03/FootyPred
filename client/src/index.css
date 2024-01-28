@@ -14,7 +14,25 @@ code {
 
 .match-row {
   display: grid;
-  grid-template-columns: 1fr 5fr 10fr 2fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 4fr 3fr 8fr 2fr 1fr 1fr 1fr;
+  text-align: center;
+}
+
+.match-row-past {
+  display: grid;
+  grid-template-columns: 4fr 3fr 8fr 2fr 1fr 1fr 1fr;
+  text-align: center;
+}
+
+.stats-row-overall {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  text-align: center;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   text-align: center;
 }
 

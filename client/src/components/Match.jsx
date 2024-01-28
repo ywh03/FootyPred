@@ -23,6 +23,7 @@ export default function Match(props) {
     }
 
     function togglePopup() {
+        if (props.isPast) return;
         setPopupOpen(!popupOpen);
     }
 
@@ -30,6 +31,16 @@ export default function Match(props) {
         const matchId = props.matchDetails._id;
         event.stopPropagation();
         await props.removeMatch(matchId, props.index);
+    }
+
+    function convertLeagueNameToFull (leagueName) {
+        const words = leagueName.split("-");
+        let processedWords = [];
+        for (const word of words) {
+            const processedWord = word[0].toUpperCase() + word.substring(1);
+            processedWords.push(processedWord);
+        }
+        return processedWords.join(" ");
     }
 
     return (
@@ -40,9 +51,12 @@ export default function Match(props) {
                         <p>Matches Loading...</p>
                     </div>
                 ) : (
-                    <div key={match._id} className="match-row" onClick={togglePopup}>
-                        <button onClick={delMatch}> {props.wantHidden ? "+" : "-"} </button>
+                    <div key={match._id} className={props.isPast ? "match-row-past" : "match-row"} onClick={togglePopup}>
+                        {
+                            props.isPast ? null : (<button onClick={delMatch}> {props.wantHidden ? "+" : "-"} </button>)
+                        }
                         <p>{convertISOtoLocalDate(match.date)}</p>
+                        <p>{convertLeagueNameToFull(match.leagueName)}</p>
                         <p>{match.homeTeam}<b>
                         {
                             props.isMatchUpdating === true ?

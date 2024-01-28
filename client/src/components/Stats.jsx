@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import NavBar from "./NavBar.jsx";
 import StatsDisplay from "./StatsDisplay.jsx";
 
