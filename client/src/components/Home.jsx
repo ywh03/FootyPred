@@ -13,21 +13,21 @@ export default function Home() {
     const [isLoading, setLoading] = React.useState(true);
     const [upcomingMatches, setUpcomingMatches] = React.useState();
 
-    async function getPastMatches() {
+    async function getUpcomingMatches() {
         const rawUpcomingMatches = await axios.get('http://localhost:9000/matches/upcomingmatches');
         setUpcomingMatches(rawUpcomingMatches.data);
         setLoading(false);
     }
 
     React.useEffect(() => {
-        getPastMatches();
+        getUpcomingMatches();
     }, [])
 
     return (
         <div>
             <NavBar />
             <h1>Upcoming Matches</h1>
-            <UpdateButton />
+            <UpdateButton pageMatchUpdate={getPastMatches} />
             {
                 isLoading ? (
                     <h2>Matches Loading...</h2>

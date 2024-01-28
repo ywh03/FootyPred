@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import StatsHeaderRow from "./StatsHeaderRow.jsx";
+import { convertLeagueNameToFull } from "./GeneralUtilities.js";
 
 export default function StatsDisplay() {
     const [isLoading, setLoading] = React.useState(true);
@@ -14,16 +15,6 @@ export default function StatsDisplay() {
         setStats(allStats);
         console.log(allStats);
         setLoading(false);
-    }
-
-    function convertLeagueNameToFull (leagueName) {
-        const words = leagueName.split("-");
-        let processedWords = [];
-        for (const word of words) {
-            const processedWord = word[0].toUpperCase() + word.substring(1);
-            processedWords.push(processedWord);
-        }
-        return processedWords.join(" ");
     }
 
     React.useEffect(() => {

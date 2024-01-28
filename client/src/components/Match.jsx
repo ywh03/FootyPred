@@ -1,5 +1,6 @@
 import React from "react";
 import MatchPopup from "./MatchPopup";
+import { convertLeagueNameToFull } from "./GeneralUtilities.js";
 
 //TODO: Remove match button to remove the match (and add it to a removed match db that expires after the match occurs)
 
@@ -10,9 +11,7 @@ export default function Match(props) {
     const [popupOpen, setPopupOpen] = React.useState(false);
 
     React.useEffect(() => {
-        console.log(props);
         setMatch(props.matchDetails);
-        console.log(match);
         setLoading(false);
     }, []);
 
@@ -31,16 +30,6 @@ export default function Match(props) {
         const matchId = props.matchDetails._id;
         event.stopPropagation();
         await props.removeMatch(matchId, props.index);
-    }
-
-    function convertLeagueNameToFull (leagueName) {
-        const words = leagueName.split("-");
-        let processedWords = [];
-        for (const word of words) {
-            const processedWord = word[0].toUpperCase() + word.substring(1);
-            processedWords.push(processedWord);
-        }
-        return processedWords.join(" ");
     }
 
     return (

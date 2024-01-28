@@ -1,6 +1,4 @@
 import express from "express";
-import axios from "axios";
-import * as cheerio from "cheerio";
 import launchPuppeteer from "./puppeteer.js";
 
 import { oddsportalLeaguesUrlsMap, remappedTeamNames } from "./constants.js";
@@ -81,14 +79,34 @@ async function getMatches(league, type) {
 
     const data = await page.evaluate((league, remappedTeamNames) => {
         function dateToISOString(date, time) {
-            const dateParts = date.split(" ");
-            const monthAbbreviation = dateParts[1];
-            const monthNo = new Date(Date.parse(monthAbbreviation + " 1, 2000")).getMonth() + 1;
-            const localDate = new Date(`${dateParts[2]}-${monthNo.toString().padStart(2, '0')}-${dateParts[0].padStart(2, '0')}T${time}:00`);
+            console.log(date);
+            console.log(time);
+            let localDate;
+            //Handle Ongoing Matches
+            //BUG: generating time like this can cause issues since matches might not start on time - this causes duplicates of the same match to appear in the database with slightly different times (perhaps check link?)
+            if (time === "FIN") {
+                console.log("Match just completed");
+                const currentTime = new Date();
+                const startingTime = new Date(currentTime.getTime() - 95*60*1000);
+                startingTime.setSeconds(0);
+                startingTime.setMilliseconds(0);
+                localDate = startingTime;
+            } else if (time[time.length-1] === "'") {
+                console.log("Match ongoing");
+                const currentTime = new Date();
+                const startingTime = new Date(currentTime.getTime() - parseInt(time.slice(0, -1))*60*1000);
+                startingTime.setSeconds(0);
+                startingTime.setMilliseconds(0);
+                localDate = startingTime;
+            } else {
+                const dateParts = date.split(" ");
+                const monthAbbreviation = dateParts[1];
+                const monthNo = new Date(Date.parse(monthAbbreviation + " 1, 2000")).getMonth() + 1;
+                localDate = new Date(`${dateParts[2]}-${monthNo.toString().padStart(2, '0')}-${dateParts[0].padStart(2, '0')}T${time}:00`);
+            }
             const isoDateString = localDate.toISOString();
             return isoDateString;
         }
-
         let dates = [];
         let matches = [];
         let currentDate = null;
@@ -164,16 +182,21 @@ async function getMatches(league, type) {
         return matches;
     }, league, remappedTeamNames);
     //console.log(data);
+    console.log("Scraping of " + league + " complete");
     await browser.close();
     return data;
 }
 
 router.get('/nextMatches', async function(req, res, next) {
+    const league = req.query.league;
+    /*
     let matches = [];
     for (const league of leaguesToScrape) {
         const leagueArr = await getMatches(league, "nextMatches");
         matches.push(...leagueArr);
     }
+    */
+    const matches = await getMatches(league, "nextMatches");
     res.json(matches);
 })
 

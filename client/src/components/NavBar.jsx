@@ -25,6 +25,9 @@ export default function NavBar () {
                     <li className="nav-item">
                         <a className="nav-link" href="/stats">Statistics</a>
                     </li>
+                    <li className="nav-item">
+                        <a className="nav-link" href="#">Additional Tools</a>
+                    </li>
                 </ul>
             </div>
         </nav>

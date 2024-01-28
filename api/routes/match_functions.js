@@ -1,7 +1,5 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import fs from 'fs';
-import { DateTime } from 'luxon';
 import { getMatchResults } from './oddsportal_scrapers.js';
 
 const UPCOMINGOFFSETDAYS = 2;
@@ -59,6 +57,7 @@ async function newMatch(scrapedAt, date, homeTeam, awayTeam, homeProb, drawProb,
     await match.save()
         .then(() => console.log(`Match ${customId} added successfully`))
         .catch((err) => {console.error("Error adding match:", err)})
+    return;
 }
 
 async function queryMatch(date, homeTeam, awayTeam) {
@@ -181,7 +180,7 @@ router.post('/checkMatchesAndAdd', async function(req, res, next) {
                 console.log("Match missing probs: " + match.date + match.homeTeam + match.awayTeam);
                 continue;
             }
-            else newMatch(match.scrapedAt, match.date, match.homeTeam, match.awayTeam, match.homeProb, match.drawProb, match.awayProb, match.leagueName, match.oddsportalUrl);
+            else await newMatch(match.scrapedAt, match.date, match.homeTeam, match.awayTeam, match.homeProb, match.drawProb, match.awayProb, match.leagueName, match.oddsportalUrl);
         }
         return res.send({"status": "Matches successfully added to database."});
     } catch (err) {
@@ -214,6 +213,7 @@ router.get('/pastMatches', async function(req, res, next) {
 })
 
 router.get('/upcomingMatches', async function(req, res, next) {
+    console.log("Query for upcoming matches received");
     try {
         const offsetDate = getOffsetCurrentISODate(UPCOMINGOFFSETDAYS);
         const query = {
@@ -223,7 +223,7 @@ router.get('/upcomingMatches', async function(req, res, next) {
         const upcomingMatches = await Match.find(query);
         res.json(upcomingMatches);
     } catch (err) {
-        console.log("Failed to get upcomign matches: " + err);
+        console.log("Failed to get upcoming matches: " + err);
     }
 })
 

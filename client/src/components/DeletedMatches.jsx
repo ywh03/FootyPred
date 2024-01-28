@@ -24,7 +24,7 @@ export default function DeletedMatches() {
         <div>
             <NavBar />
             <h1>Past Matches</h1>
-            <UpdateButton />
+            <UpdateButton pageMatchUpdate={getDeletedMatches} />
             {
                 isLoading ? (
                     <h2>Matches Loading...</h2>
