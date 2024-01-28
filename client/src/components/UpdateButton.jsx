@@ -4,7 +4,7 @@ import { convertLeagueNameToFull } from "./GeneralUtilities.js";
 
 export default function UpdateButton(props) {
 
-    const leaguesToScrape = ["laliga"];
+    const leaguesToScrape = ["fa-cup"];
 
     const [isUpdating, setUpdating] = React.useState(false);
     const [nowScraping, setNowScraping] = React.useState();

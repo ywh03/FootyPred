@@ -119,7 +119,9 @@ async function getUpdatedMatchScore(matchId) {
         _id: matchId,
     }
     const match = await Match.findOne(query);
+    console.log(match);
     const oddsportalUrl = match.oddsportalUrl;
+    console.log("Url: " + oddsportalUrl);
     const matchResults = await getMatchResults(oddsportalUrl);
     if (matchResults.matchStatus === "Completed") {
         addResults(matchId, matchResults.actlHomeTeamScore, matchResults.actlAwayTeamScore);

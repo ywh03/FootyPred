@@ -48,6 +48,10 @@ code {
   color: red;
 }
 
+.match-ongoing {
+  color: crimson;
+}
+
 .submit-pred-form {
   text-align: center;
 }

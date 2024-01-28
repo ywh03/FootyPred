@@ -135,7 +135,12 @@ async function getMatches(league, type) {
             }
             //NOTE: realMatchBlock not found
             const realMatchBlock = matchBlock.querySelector('a.border-black-borders.flex.flex-col.border-b');
-            const oddsportalUrl = realMatchBlock.href;
+            //Sometimes the overarching a doesn't have href, need look deeper
+            let oddsportalUrl = realMatchBlock.href;
+            if (oddsportalUrl === '') {
+                const hrefBlock = realMatchBlock.querySelector('a[href]');
+                oddsportalUrl = hrefBlock.href;
+            }
             const timeField = realMatchBlock.querySelector('div.next-m\\:flex-col.min-md\\:flex-row.min-md\\:gap-1.text-gray-dark.flex.flex-row.self-center.text-\\[12px\\].w-full');
             const time = timeField.textContent;
             //console.log("Current date is " + currentDate + " " + time);

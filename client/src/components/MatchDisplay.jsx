@@ -17,6 +17,7 @@ function MatchDisplay(props) {
         return false;
     }
 
+    //FIXME: Make sure to not push unfinished matches into the database; also make the match result span red when match is ongoing
     async function updateMatch(matchId, index) {
         let tempMatchUpdating = {...isMatchUpdating};
         tempMatchUpdating[index] = true;
@@ -54,9 +55,11 @@ function MatchDisplay(props) {
             //console.log(match);
             const matchDate = match.date;
             if (compareDate(matchDate) && !match.hasOwnProperty("actlHomeScore")) {
-                updateMatch(match._id, index);
+
+                await updateMatch(match._id, index);
             }
         }
+        return;
     }
 
     //TODO: fix toggling not automatically updating the list issue
@@ -73,6 +76,10 @@ function MatchDisplay(props) {
         })
         console.log(props.matches);
     }
+
+    React.useEffect(() => {
+        checkMatchesForUpdates();
+    }, [])
 
     return (
         <div className="match-table">

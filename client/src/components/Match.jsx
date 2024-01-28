@@ -55,7 +55,7 @@ export default function Match(props) {
                         }
                         { match.hasOwnProperty('actlHomeScore') ?
                         //TODO: Make this span red when match is ongoing
-                            <span> {match.actlHomeScore} - {match.actlAwayScore} </span> :
+                            <span className={props.matchDetails.matchStatus === "Ongoing" ? "match-ongoing" : ""}> {match.actlHomeScore} - {match.actlAwayScore} </span> :
                             props.isMatchUpdating === true ?
                             null : <span> - </span>
                         }

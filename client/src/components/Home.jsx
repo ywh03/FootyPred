@@ -19,6 +19,8 @@ export default function Home() {
         setLoading(false);
     }
 
+    //TODO: Not searching for match results anymore
+
     React.useEffect(() => {
         getUpcomingMatches();
     }, [])
@@ -27,7 +29,7 @@ export default function Home() {
         <div>
             <NavBar />
             <h1>Upcoming Matches</h1>
-            <UpdateButton pageMatchUpdate={getPastMatches} />
+            <UpdateButton pageMatchUpdate={getUpcomingMatches} />
             {
                 isLoading ? (
                     <h2>Matches Loading...</h2>
