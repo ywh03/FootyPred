@@ -51,7 +51,7 @@ async function getMatchResults(matchUrl) {
             }
             if (matchStatus === "Ongoing") {
                 const matchTime = document.querySelector('.result-live+div');
-                data.matchTime = matchTime.textContent;
+                data.matchStatus = matchTime.textContent;
             }
             return data;
         } catch (err) {
@@ -82,8 +82,8 @@ async function getMatches(league, type) {
             console.log(date);
             console.log(time);
             let localDate;
-            //Handle Ongoing Matches
             //BUG: generating time like this can cause issues since matches might not start on time - this causes duplicates of the same match to appear in the database with slightly different times (perhaps check link?)
+            //Running the link will take additional time... and a lot more complexity
             if (time === "FIN") {
                 console.log("Match just completed");
                 const currentTime = new Date();
@@ -135,7 +135,7 @@ async function getMatches(league, type) {
             }
             //NOTE: realMatchBlock not found
             const realMatchBlock = matchBlock.querySelector('a.border-black-borders.flex.flex-col.border-b');
-            //Sometimes the overarching a doesn't have href, need look deeper
+            //DONE: Sometimes the overarching a doesn't have href, need look deeper
             let oddsportalUrl = realMatchBlock.href;
             if (oddsportalUrl === '') {
                 const hrefBlock = realMatchBlock.querySelector('a[href]');

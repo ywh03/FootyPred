@@ -10,6 +10,7 @@ function MatchDisplay(props) {
 
     function compareDate(date) {
         const currentDate = new Date();
+        //NOTE: Use this hour_diff to fix the FIXME in this page
         const matchDate = new Date(date);
         if (currentDate > matchDate) {
             return true;
@@ -24,21 +25,14 @@ function MatchDisplay(props) {
         setMatchUpdating(tempMatchUpdating);
         const rawMatchResults = await axios.post('http://localhost:9000/matches', {"matchId": matchId});
         const matchResults = rawMatchResults.data;
-        if (matchResults.matchStatus === "Completed") {
+        if (matchResults.matchStatus !== "Uncommenced") {
             props.setMatches((prevArray) => {
                 const updatedArray = [...prevArray];
                 //const object = {...updatedArray[index], actlHomeTeamScore: matchResults.actlHomeTeamScore, actlAwayTeamScore: matchResults.actlAwayTeamScore};
                 const object = updatedArray[index];
                 object.actlHomeScore = matchResults.actlHomeTeamScore;
                 object.actlAwayScore = matchResults.actlAwayTeamScore;
-                updatedArray[index] = object;
-                return updatedArray;
-            });
-        }
-        else if (matchResults.matchStatus === "Ongoing") {
-            props.setMatches((prevArray) => {
-                const updatedArray = [...prevArray];
-                const object = {...updatedArray[index], actlHomeTeamScore: matchResults.actlHomeTeamScore, actlAwayTeamScore: matchResults.actlAwayTeamScore, matchTime: matchResults.matchTime};
+                object.matchStatus = matchResults.matchStatus;
                 updatedArray[index] = object;
                 return updatedArray;
             });
@@ -52,10 +46,11 @@ function MatchDisplay(props) {
     async function checkMatchesForUpdates() {
         //console.log(allMatches.data);
         for (const [index, match] of props.matches.entries()) {
-            //console.log(match);
+            console.log(match);
             const matchDate = match.date;
-            if (compareDate(matchDate) && !match.hasOwnProperty("actlHomeScore")) {
-
+            //FIXME: Need to check if the match has ended, not enough match has actlHomeScore
+            if (compareDate(matchDate) && match.matchStatus !== "Completed") {
+                console.log(match);
                 await updateMatch(match._id, index);
             }
         }

@@ -6,14 +6,7 @@ import { convertLeagueNameToFull } from "./GeneralUtilities.js";
 
 export default function Match(props) {
 
-    const [match, setMatch] = React.useState();
-    const [isLoading, setLoading] = React.useState(true);
     const [popupOpen, setPopupOpen] = React.useState(false);
-
-    React.useEffect(() => {
-        setMatch(props.matchDetails);
-        setLoading(false);
-    }, []);
 
     function convertISOtoLocalDate(isoDate) {
         const utcDate = new Date(isoDate);
@@ -35,49 +28,50 @@ export default function Match(props) {
     return (
         <div>
             {
-                isLoading ? (
+                props.isMatchUpdating ? (
                     <div>
-                        <p>Matches Loading...</p>
+                        <p>Updating Match Scores...</p>
                     </div>
                 ) : (
-                    <div key={match._id} className={props.isPast ? "match-row-past" : "match-row"} onClick={togglePopup}>
+                    <div key={props.matchDetails._id} className={props.isPast ? "match-row-past" : "match-row"} onClick={togglePopup}>
                         {
                             props.isPast ? null : (<button onClick={delMatch}> {props.wantHidden ? "+" : "-"} </button>)
                         }
-                        <p>{convertISOtoLocalDate(match.date)}</p>
-                        <p>{convertLeagueNameToFull(match.leagueName)}</p>
-                        <p>{match.homeTeam}<b>
+                        {
+                            props.matchDetails.matchStatus !== "Completed" && props.matchDetails.matchStatus !== "Uncommenced" ? (
+                                <p className="match-ongoing">props.matchDetails.matchStats</p> 
+                                ) : (
+                                <p>{convertISOtoLocalDate(props.matchDetails.date)}</p>
+                            )
+                        }
+                        <p>{convertLeagueNameToFull(props.matchDetails.leagueName)}</p>
+                        <p>{props.matchDetails.homeTeam}<b>
                         {
                             props.isMatchUpdating === true ?
                             //TODO: Make this a small animated spinner
                             <span> ? - ? </span> :
                             null
                         }
-                        { match.hasOwnProperty('actlHomeScore') ?
+                        { props.matchDetails.hasOwnProperty('actlHomeScore') ?
                         //TODO: Make this span red when match is ongoing
-                            <span className={props.matchDetails.matchStatus === "Ongoing" ? "match-ongoing" : ""}> {match.actlHomeScore} - {match.actlAwayScore} </span> :
+                            <span className={props.matchDetails.matchStatus !== "Uncommenced" && props.matchDetails.matchStatus !== "Completed" ? "match-ongoing" : ""}> {props.matchDetails.actlHomeScore} - {props.matchDetails.actlAwayScore} </span> :
                             props.isMatchUpdating === true ?
                             null : <span> - </span>
                         }
-                        </b>{match.awayTeam}</p>
+                        </b>{props.matchDetails.awayTeam}</p>
                         <p className={
-                            match.actlHomeScore === undefined ? null : match.actlHomeScore === match.predHomeScore && match.actlAwayScore === match.predAwayScore ? "correct-prediction" : "incorrect-prediction"
-                        } >{match.predHomeScore} - {match.predAwayScore}</p>
-                        {
-                            props.hasOwnProperty("matchTime") ? (
-                                <p>matchTime</p>
-                            ) : null
-                        }
-                        <p className={ match.hasOwnProperty('actlHomeScore') && match.hasOwnProperty('predHomeScore') && match.actlHomeScore > match.actlAwayScore && match.predHomeScore > match.predAwayScore ? "correct-prediction" : match.hasOwnProperty('actlHomeScore') && match.hasOwnProperty('predHomeScore') && match.predHomeScore > match.predAwayScore ? "incorrect-prediction" : null }>{match.homeProb}</p>
-                        <p className={ match.hasOwnProperty('actlHomeScore') && match.hasOwnProperty('predHomeScore') && match.actlHomeScore === match.actlAwayScore && match.predHomeScore === match.predAwayScore ? "correct-prediction" : match.hasOwnProperty('actlHomeScore') && match.hasOwnProperty('predHomeScore') && match.predHomeScore === match.predAwayScore ? "incorrect-prediction" : null }>{match.drawProb}</p>
-                        <p className={ match.hasOwnProperty('actlHomeScore') && match.hasOwnProperty('predHomeScore') && match.actlHomeScore < match.actlAwayScore && match.predHomeScore < match.predAwayScore ? "correct-prediction" : match.hasOwnProperty('actlHomeScore') && match.hasOwnProperty('predHomeScore') && match.predHomeScore < match.predAwayScore ? "incorrect-prediction" : null }>{match.awayProb}</p>
+                            props.matchDetails.actlHomeScore === undefined ? null : props.matchDetails.actlHomeScore === props.matchDetails.predHomeScore && props.matchDetails.actlAwayScore === props.matchDetails.predAwayScore ? "correct-prediction" : "incorrect-prediction"
+                        } >{props.matchDetails.predHomeScore} - {props.matchDetails.predAwayScore}</p>
+                        <p className={ props.matchDetails.hasOwnProperty('actlHomeScore') && props.matchDetails.hasOwnProperty('predHomeScore') && props.matchDetails.actlHomeScore > props.matchDetails.actlAwayScore && props.matchDetails.predHomeScore > props.matchDetails.predAwayScore ? "correct-prediction" : props.matchDetails.hasOwnProperty('actlHomeScore') && props.matchDetails.hasOwnProperty('predHomeScore') && props.matchDetails.predHomeScore > props.matchDetails.predAwayScore ? "incorrect-prediction" : null }>{props.matchDetails.homeProb}</p>
+                        <p className={ props.matchDetails.hasOwnProperty('actlHomeScore') && props.matchDetails.hasOwnProperty('predHomeScore') && props.matchDetails.actlHomeScore === props.matchDetails.actlAwayScore && props.matchDetails.predHomeScore === props.matchDetails.predAwayScore ? "correct-prediction" : props.matchDetails.hasOwnProperty('actlHomeScore') && props.matchDetails.hasOwnProperty('predHomeScore') && props.matchDetails.predHomeScore === props.matchDetails.predAwayScore ? "incorrect-prediction" : null }>{props.matchDetails.drawProb}</p>
+                        <p className={ props.matchDetails.hasOwnProperty('actlHomeScore') && props.matchDetails.hasOwnProperty('predHomeScore') && props.matchDetails.actlHomeScore < props.matchDetails.actlAwayScore && props.matchDetails.predHomeScore < props.matchDetails.predAwayScore ? "correct-prediction" : props.matchDetails.hasOwnProperty('actlHomeScore') && props.matchDetails.hasOwnProperty('predHomeScore') && props.matchDetails.predHomeScore < props.matchDetails.predAwayScore ? "incorrect-prediction" : null }>{props.matchDetails.awayProb}</p>
                     </div> 
                 )
             }
             <div>
                 {
                     popupOpen ? (
-                        <MatchPopup matchId={match._id} homeTeam={props.homeTeam} awayTeam={props.awayTeam}/>
+                        <MatchPopup matchId={props.matchDetails._id} homeTeam={props.homeTeam} awayTeam={props.awayTeam}/>
                     ) : null
                 }
             </div>

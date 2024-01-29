@@ -23,6 +23,7 @@ const matchSchema = new mongoose.Schema({
     exactGuess: Boolean,
     fotmobUrl: String,
     oddsportalUrl: String,
+    matchStatus: String,
     hidden: {
         type: Boolean, 
         default: false,
@@ -90,7 +91,7 @@ async function addPredictions(matchId, predHomeScore, predAwayScore) {
     }
 }
 
-async function addResults(matchId, actlHomeScore, actlAwayScore) {
+async function addResults(matchId, actlHomeScore, actlAwayScore, matchStatus) {
     console.log("Request to add results received");
     const query = {
         _id: matchId,
@@ -99,6 +100,7 @@ async function addResults(matchId, actlHomeScore, actlAwayScore) {
         $set: {
             actlHomeScore: actlHomeScore,
             actlAwayScore: actlAwayScore,
+            matchStatus: matchStatus,
         }
     }
     const updatedMatch = await Match.findOneAndUpdate(query, updateOperation);
@@ -124,7 +126,7 @@ async function getUpdatedMatchScore(matchId) {
     console.log("Url: " + oddsportalUrl);
     const matchResults = await getMatchResults(oddsportalUrl);
     if (matchResults.matchStatus === "Completed") {
-        addResults(matchId, matchResults.actlHomeTeamScore, matchResults.actlAwayTeamScore);
+        addResults(matchId, matchResults.actlHomeTeamScore, matchResults.actlAwayTeamScore, matchResults.matchStatus);
     }
     return matchResults;
 }
