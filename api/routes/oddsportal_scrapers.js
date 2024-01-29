@@ -8,21 +8,6 @@ const leaguesToScrape = [
     "premier-league",
 ]
 
-// Convert date in format 24 Feb 2024 10:30 to ISOString in UTC
-function dateToISOString(date, time) {
-    const dateParts = date.split(" ");
-    const monthAbbreviation = dateParts[1];
-    const monthNo = new Date(Date.parse(monthAbbreviation + " 1, 2000")).getMonth() + 1;
-    const localDate = new Date(`${dateParts[2]}-${monthNumber.toString().padStart(2, '0')}-${dateParts[0].padStart(2, '0')}T${time}:00`);
-    const isoDateString = localDate.toISOString();
-    return isoDateString;
-}
-
-function getCurrentDate() {
-    const currentDate = new Date().toISOString();
-    return currentDate;
-}
-
 async function getMatchResults(matchUrl) {
     const browser = await launchPuppeteer();
     const page = await browser.newPage();
@@ -61,6 +46,8 @@ async function getMatchResults(matchUrl) {
     await browser.close();
     return result;
 }
+
+//TODO: Implement getIndivMatch and getMatchInfo route
 
 async function getMatches(league, type) {
     let leagueUrl;
@@ -212,6 +199,10 @@ router.get('/results', async function(req, res, next) {
         matches.push(leagueArr);
     }
     return matches;
+})
+
+router.get('/getMatchInfo', async function(req, res, next) {
+    const oddsportalUrl = req.query.oddsportalUrl;   
 })
 
 export default router;

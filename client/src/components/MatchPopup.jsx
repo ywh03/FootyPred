@@ -15,12 +15,12 @@ export default function MatchPopup(props) {
     return (
         <div className="submit-pred-form">
             <form onSubmit={submitPredScores}>
-            <label for="predHomeScore">{props.homeTeam}</label>
-            <input type="number" name="predHomeScore" min="0" />
-            <span> : </span>
-            <label for="predAwayScore">{props.awayTeam}</label>
-            <input type="number" name="predAwayScore" min="0" />
-            <button type="submit">Submit</button>
+                <label htmlFor="predHomeScore">{props.homeTeam}</label>
+                <input type="number" name="predHomeScore" min="0" />
+                <span> : </span>
+                <label htmlFor="predAwayScore">{props.awayTeam}</label>
+                <input type="number" name="predAwayScore" min="0" />
+                <button type="submit">Submit</button>
             </form>
         </div>
     )
