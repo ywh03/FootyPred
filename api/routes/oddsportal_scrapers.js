@@ -8,6 +8,7 @@ const leaguesToScrape = [
     "premier-league",
 ]
 
+//TODO: catch invalid url and return error
 async function getMatchResults(matchUrl) {
     const browser = await launchPuppeteer();
     const page = await browser.newPage();
@@ -19,7 +20,7 @@ async function getMatchResults(matchUrl) {
         console.log("Console message: " + message.text());
     })
 
-    const result = await page.evaluate(() => {
+    const result = await page.evaluate((matchUrl) => {
         console.log("Starting to get match results.");
         try {
             const scoreField = document.querySelector('div.relative.px-\\[12px\\].flex.max-mm\\:flex-col.w-auto.min-sm\\:w-full.pb-5.pt-5.min-mm\\:items-center.font-semibold.text-\\[22px\\].text-black-main.gap-2.border-b.border-black-borders.font-secondary');
@@ -29,10 +30,38 @@ async function getMatchResults(matchUrl) {
             else if (scores[0].classList.contains("text-red-dark")) matchStatus = "Ongoing";
             const homeTeamScore = scores[0].textContent;
             const awayTeamScore = scores[1].textContent;
+            const teams = document.querySelectorAll("span.truncate");
+            const homeTeam = teams[0].textContent;
+            const awayTeam = teams[1].textContent;
+            const timeField = document.querySelector('div.flex.text-xs.font-normal.text-gray-dark.font-main.item-center.gap-1');
+            const sepTimes = timeField.querySelectorAll('p+p');
+            const dateString = sepTimes[0].textContent + " " + sepTimes[1].textContent;
+            const dateObject = new Date(dateString);
+            const dateISOString = dateObject.toISOString();
+            //const matchId = dateISOString + "-" + homeTeam + "-" + awayTeam;
+            const oddsField = document.querySelector('div.border-black-borders.bg-gray-light.flex.h-9.border-b.border-l.border-r.text-xs');
+            const odds = oddsField.querySelectorAll('p.height-content');
+            const homeProb = odds[1].textContent;
+            const drawProb = odds[2].textContent;
+            const awayProb = odds[3].textContent;
+            const leagueField = document.querySelector('a[data-testid|="3"]');
+            const leagueName = leagueField.textContent.toLowerCase().split(" ").join('-');
+            const scrapedAt = new Date().toISOString();
             const data = {
-                actlHomeTeamScore: homeTeamScore,
-                actlAwayTeamScore: awayTeamScore,
+                scrapedAt: scrapedAt,
+                homeTeam: homeTeam,
+                awayTeam: awayTeam,
+                homeProb: homeProb,
+                drawProb: drawProb,
+                awayProb: awayProb,
+                leagueName: leagueName,
+                date: dateISOString,
+                oddsportalUrl: matchUrl[0],
                 matchStatus: matchStatus
+            }
+            if (matchStatus !== "Uncommenced") {
+                data.actlHomeTeamScore = homeTeamScore;
+                data.actlAwayTeamScore = awayTeamScore;
             }
             if (matchStatus === "Ongoing") {
                 const matchTime = document.querySelector('.result-live+div');
@@ -42,7 +71,7 @@ async function getMatchResults(matchUrl) {
         } catch (err) {
             console.log("Error: " + err);
         }
-    })
+    }, [matchUrl])
     await browser.close();
     return result;
 }

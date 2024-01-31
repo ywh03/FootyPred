@@ -41,7 +41,7 @@ function getOffsetCurrentISODate(offsetDays) {
     return offsetDate.toISOString();
 }
 
-async function newMatch(scrapedAt, date, homeTeam, awayTeam, homeProb, drawProb, awayProb, leagueName, oddsportalUrl) {
+async function newMatch(scrapedAt, date, homeTeam, awayTeam, homeProb, drawProb, awayProb, leagueName, oddsportalUrl, actlHomeScore, actlAwayScore) {
     const customId = `${date}-${homeTeam}-${awayTeam}`;
     const match = new Match({
         _id: customId,
@@ -55,6 +55,10 @@ async function newMatch(scrapedAt, date, homeTeam, awayTeam, homeProb, drawProb,
         scrapedAt: scrapedAt,
         oddsportalUrl: oddsportalUrl
     })
+    if (actlHomeScore !== undefined && actlAwayScore !== undefined) {
+        match.actlHomeScore = actlHomeScore;
+        match.actlAwayScore = actlAwayScore;
+    }
     await match.save()
         .then(() => console.log(`Match ${customId} added successfully`))
         .catch((err) => {console.error("Error adding match:", err)})
@@ -240,6 +244,22 @@ router.get('/deletedMatches', async function(req, res, next) {
         res.json(deletedMatches);
     } catch (err) {
         console.log("Failed to get deleted matches: " + err);
+    }
+})
+
+router.post('/addMatchViaUrl', async function(req, res, next) {
+    console.log("Request to add match via url received");
+    const match = await getMatchResults(req.body.url);
+    console.log("Match details obtained, passing to add match");
+    const matchFromDB = await queryMatch(match.date, match.homeTeam, match.awayTeam);
+    console.log(matchFromDB);
+    if (matchFromDB) res.send("Match already in database");
+    else if (match.hasOwnProperty("actlHomeTeamScore")){
+        await newMatch(match.scrapedAt, match.date, match.homeTeam, match.awayTeam, match.homeProb, match.drawProb, match.awayProb, match.leagueName, match.oddsportalUrl, match.actlHomeTeamScore, match.actlAwayTeamScore);
+        res.send("Match with scores added to database");
+    } else {
+        await newMatch(match.scrapedAt, match.date, match.homeTeam, match.awayTeam, match.homeProb, match.drawProb, match.awayProb, match.leagueName, match.oddsportalUrl);
+        res.send("Match added to database");
     }
 })
 
