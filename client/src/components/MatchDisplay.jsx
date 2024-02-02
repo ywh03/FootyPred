@@ -78,15 +78,15 @@ function MatchDisplay(props) {
 
     return (
         <div className="match-table">
-            <div className={`match-table-column-headers ${props.isPast ? 'match-row-past' : 'match-row' }`}>
-                { props.isPast ? null : props.wantHidden ? <p className="match-table-item">Add</p> : <p className="match-table-item">Remove</p> }
-                <p className="match-table-item">Date & Time</p>
-                <p className="match-table-item">Competition</p>
-                <p className="match-table-item">Match</p>
-                <p className="match-table-item">Predictions</p>
-                <p className="match-table-item">1</p>
-                <p className="match-table-item">X</p>
-                <p className="match-table-item">2</p>
+            <div className={`match-row match-table-column-headers ${props.isPast ? 'match-row-past' : 'match-row' }`}>
+                { props.isPast ? null : props.wantHidden ? <p className="match-row-item">Add</p> : <p className="match-row-item match-row-remove-button">Remove</p> }
+                <p className="match-row-item match-row-date">Date & Time</p>
+                <p className="match-row-item match-row-competition">Competition</p>
+                <p className="match-row-item match-row-match">Match</p>
+                <p className="match-row-item match-row-prediction">Predictions</p>
+                <p className="match-row-item match-row-odd">1</p>
+                <p className="match-row-item match-row-odd">X</p>
+                <p className="match-row-item match-row-odd">2</p>
             </div>
             <div>
             { props.matches.map(function(match, index) {
