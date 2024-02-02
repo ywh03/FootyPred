@@ -53,7 +53,8 @@ async function newMatch(scrapedAt, date, homeTeam, awayTeam, homeProb, drawProb,
         leagueName: leagueName,
         date: date,
         scrapedAt: scrapedAt,
-        oddsportalUrl: oddsportalUrl
+        oddsportalUrl: oddsportalUrl,
+        matchStatus: "Uncommenced"
     })
     if (actlHomeScore !== undefined && actlAwayScore !== undefined) {
         match.actlHomeScore = actlHomeScore;

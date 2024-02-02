@@ -150,7 +150,8 @@ async function getMatches(league, type) {
                 currentDate = date;
             }
             //NOTE: realMatchBlock not found
-            const realMatchBlock = matchBlock.querySelector('a.border-black-borders.flex.flex-col.border-b');
+            //const realMatchBlock = matchBlock.querySelector('a.border-black-borders.flex.flex-col.border-b');
+            const realMatchBlock = matchBlock.querySelector('div[data-testid="game-row"]');
             //DONE: Sometimes the overarching a doesn't have href, need look deeper
             let oddsportalUrl = realMatchBlock.href;
             if (oddsportalUrl === '') {

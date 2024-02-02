@@ -4,6 +4,7 @@ import axios from "axios";
 export default function MatchPopup(props) {
 
     function submitPredScores(event) {
+        //TODO: Stop page refresh and handle react updates after form submission
         const submittedPred = {
             "matchId": props.matchId,
             "predHomeScore": event.target.predHomeScore.value,
