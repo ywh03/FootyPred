@@ -36,8 +36,20 @@ code {
   color: crimson;
 }
 
-.submit-pred-form {
+.prediction-form {
   text-align: center;
+}
+
+.prediction-button {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  margin-left: 0.4rem;
+  margin-bottom: 2px;
+}
+
+.prediction-form-field {
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
 }
 
 /* ======================== MATCH TABLE ====================== */

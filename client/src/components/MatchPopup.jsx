@@ -14,14 +14,14 @@ export default function MatchPopup(props) {
     }
 
     return (
-        <div className="submit-pred-form">
+        <div className="prediction-form">
             <form onSubmit={submitPredScores}>
-                <label htmlFor="predHomeScore">{props.homeTeam}</label>
-                <input type="number" name="predHomeScore" min="0" />
-                <span> : </span>
-                <label htmlFor="predAwayScore">{props.awayTeam}</label>
-                <input type="number" name="predAwayScore" min="0" />
-                <button type="submit">Submit</button>
+                <div className="form-row">
+                    <input className="prediction-form-field form-control-inline" type="number" name="predHomeScore" min="0" placeholder={props.homeTeam} />
+                    <span> : </span>
+                    <input className="prediction-form-field form-control-inline" type="number" name="predAwayScore" min="0" placeholder={props.awayTeam} />
+                    <button className="prediction-button btn btn-success" type="submit">Submit</button>
+                </div>
             </form>
         </div>
     )
