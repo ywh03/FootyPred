@@ -36,6 +36,19 @@ code {
   color: crimson;
 }
 
+/* ======================== HEADINGS AND UPDATE BUTTON ====================== */
+.page-title {
+  padding: 1% 3%;
+  display: inline-block;
+}
+
+.update-button {
+  float: right;
+  display: inline;
+  padding: 1% 3%;
+}
+
+/* ========== PREDICTION FORM ==============*/
 .prediction-form {
   text-align: center;
 }

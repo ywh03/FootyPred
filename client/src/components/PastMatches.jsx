@@ -21,7 +21,7 @@ export default function PastMatches() {
     return (
         <div>
             <NavBar />
-            <h1>Past Matches</h1>
+            <h1 className="page-title">Past Matches</h1>
             {
                 isLoading ? (
                     <h2>Matches Loading...</h2>

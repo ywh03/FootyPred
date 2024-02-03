@@ -35,7 +35,7 @@ export default function UpdateButton(props) {
     }
 
     return (
-        <div>
+        <div className="update-button">
             <button className="btn btn-primary" onClick={updateNextMatches}>{isUpdating ? "Updating" : "Update"}</button>
             {
                 nowScraping ? <p>Now Scraping: {nowScraping}</p> : null

@@ -11,7 +11,7 @@ export default function Stats() {
     return (
         <div>
             <NavBar />
-            <h1>Statistics</h1>
+            <h1 className="page-title">Statistics</h1>
             <StatsDisplay />
         </div>
     )

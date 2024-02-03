@@ -23,7 +23,7 @@ export default function AdditionalTools() {
     return (
         <div>
             <NavBar />
-            <h1>Additional Tools</h1>
+            <h1 className="page-title">Additional Tools</h1>
             <h3>Manually Add Match</h3>
             <form onSubmit={submitUrl}>
                 <label htmlFor="oddsportalUrl">Oddsportal URL</label>

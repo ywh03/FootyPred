@@ -27,7 +27,7 @@ export default function Home() {
     return (
         <div>
             <NavBar />
-            <h1>Upcoming Matches</h1>
+            <h1 className="page-title">Upcoming Matches</h1>
             <UpdateButton pageMatchUpdate={getUpcomingMatches} />
             {
                 isLoading ? (
