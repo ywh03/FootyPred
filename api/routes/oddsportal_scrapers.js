@@ -66,7 +66,7 @@ async function getMatchResults(matchUrl) {
             }
             if (matchStatus === "Ongoing") {
                 const matchTime = document.querySelector('.result-live+div');
-                data.matchStatus = matchTime.textContent;
+                if (matchTime !== null) data.matchStatus = matchTime.textContent;
             }
             return data;
         } catch (err) {
