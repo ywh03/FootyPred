@@ -7,6 +7,7 @@ import indexRouter from './routes/index.js';
 import matchRouter from './routes/match_functions.js';
 import scrapeRouter from './routes/oddsportal_scrapers.js';
 import statsRouter from './routes/stats_handler.js'
+import leagueRouter from './routes/league_functions.js'
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(('/', indexRouter));
 app.use('/matches', matchRouter);
 app.use('/scrape', scrapeRouter);
 app.use('/stats', statsRouter);
+app.use('/leagues', leagueRouter);
 app.listen(9000, function(){
 	console.log("Server started on port 9000");
 });

@@ -82,7 +82,15 @@ router.post('/updateStatus', async function (req, res, next) {
 
 router.post('/addLeague', async function (req, res, next) {
     const leagueUrl = req.body.leagueUrl;
-    const leagueAlias = req.body.alias;   
+    const leagueAlias = req.body.leagueAlias;
+    const tempArray = leagueUrl.split("/");
+    const leagueId = tempArray[tempArray.length - 2];
+    await newLeague({
+        _id: leagueId,
+        alias: leagueAlias,
+        oddsportalUrl: leagueUrl
+    })
+    res.send("League added to database");
 })
 
 export default router;
