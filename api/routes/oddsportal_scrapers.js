@@ -25,8 +25,10 @@ async function getMatchResults(matchUrl) {
             const scoreField = document.querySelector('div.relative.px-\\[12px\\].flex.max-mm\\:flex-col.w-auto.min-sm\\:w-full.pb-5.pt-5.min-mm\\:items-center.font-semibold.text-\\[22px\\].text-black-main.gap-2.border-b.border-black-borders.font-secondary');
             const scores = scoreField.querySelectorAll('div.max-mm\\:gap-2>div.flex-wrap.gap-2');
             let matchStatus = "Completed";
-            if (scores.length === 0 || scores[0].textContent === '') matchStatus = "Uncommenced";
+            if (scores[0].querySelector('div') !== null) matchStatus = "Ongoing";
+            else if (scores.length === 0 || scores[0].textContent === '') matchStatus = "Uncommenced";
             else if (scores[0].classList.contains("text-red-dark")) matchStatus = "Ongoing";
+            console.log("Match Status: " + matchStatus);
             const homeTeamScore = scores[0].textContent;
             const awayTeamScore = scores[1].textContent;
             const teams = document.querySelectorAll("span.truncate");

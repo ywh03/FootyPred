@@ -130,7 +130,7 @@ async function getUpdatedMatchScore(matchId) {
     const oddsportalUrl = match.oddsportalUrl;
     console.log("Url: " + oddsportalUrl);
     const matchResults = await getMatchResults(oddsportalUrl);
-    if (matchResults.matchStatus === "Completed") {
+    if (matchResults.matchStatus !== "Uncommenced") {
         addResults(matchId, matchResults.actlHomeTeamScore, matchResults.actlAwayTeamScore, matchResults.matchStatus);
     }
     return matchResults;
