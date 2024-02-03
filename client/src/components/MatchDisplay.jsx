@@ -79,7 +79,7 @@ function MatchDisplay(props) {
     return (
         <div className="match-table">
             <div className={`match-row match-table-column-headers ${props.isPast ? 'match-row-past' : 'match-row' }`}>
-                { props.isPast ? null : props.wantHidden ? <p className="match-row-item">Add</p> : <p className="match-row-item match-row-remove-button">Remove</p> }
+                { props.isPast ? null : props.wantHidden ? <p className="match-row-item match-row-remove-button">Add</p> : <p className="match-row-item match-row-remove-button">Remove</p> }
                 <p className="match-row-item match-row-date">Date & Time</p>
                 <p className="match-row-item match-row-competition">Competition</p>
                 <p className="match-row-item match-row-match">Match</p>
