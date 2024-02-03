@@ -29,8 +29,8 @@ export default function Match(props) {
         <div>
             {
                 props.isMatchUpdating ? (
-                    <div>
-                        <p>Updating Match Scores...</p>
+                    <div className="match-row">
+                        <p><b>Updating Match Scores...</b></p>
                     </div>
                 ) : (
                     <div key={props.matchDetails._id} className="match-row" onClick={togglePopup}>
