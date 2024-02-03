@@ -5,7 +5,6 @@ import { oddsportalLeaguesUrlsMap, remappedTeamNames } from "./constants.js";
 
 const router = express.Router();
 const leaguesToScrape = [
-    "premier-league",
 ]
 
 //TODO: catch invalid url and return error
@@ -95,8 +94,6 @@ async function getMatches(league, type) {
 
     const data = await page.evaluate((league, remappedTeamNames) => {
         function dateToISOString(date, time) {
-            console.log(date);
-            console.log(time);
             let localDate;
             //BUG: generating time like this can cause issues since matches might not start on time - this causes duplicates of the same match to appear in the database with slightly different times (perhaps check link?)
             //Running the link will take additional time... and a lot more complexity
@@ -153,11 +150,8 @@ async function getMatches(league, type) {
             //const realMatchBlock = matchBlock.querySelector('a.border-black-borders.flex.flex-col.border-b');
             const realMatchBlock = matchBlock.querySelector('div[data-testid="game-row"]');
             //DONE: Sometimes the overarching a doesn't have href, need look deeper
-            let oddsportalUrl = realMatchBlock.href;
-            if (oddsportalUrl === '') {
-                const hrefBlock = realMatchBlock.querySelector('a[href]');
-                oddsportalUrl = hrefBlock.href;
-            }
+            const hrefBlock = realMatchBlock.querySelector('a[href]');
+            const oddsportalUrl = hrefBlock.href;
             const timeField = realMatchBlock.querySelector('div.next-m\\:flex-col.min-md\\:flex-row.min-md\\:gap-1.text-gray-dark.flex.flex-row.self-center.text-\\[12px\\].w-full');
             const time = timeField.textContent;
             //console.log("Current date is " + currentDate + " " + time);
@@ -176,10 +170,15 @@ async function getMatches(league, type) {
             }
             const oddsFields = realMatchBlock.querySelectorAll('p.height-content');
             let oddsArray = [];
+            let failedValidation = false;
             for (const oddsField of oddsFields) {
-                if (oddsField.textContent === "-") continue;
+                if (oddsField.textContent === "-") {
+                    failedValidation = true;
+                    continue;
+                }
                 oddsArray.push(oddsField.textContent);
             }
+            if (failedValidation) continue;
             const homeProb = oddsArray[0];
             const drawProb = oddsArray[1];
             const awayProb = oddsArray[2];
@@ -195,6 +194,14 @@ async function getMatches(league, type) {
                 oddsportalUrl: oddsportalUrl,
                 scrapedAt: scrapedAt,
             }
+            // VALIDATION
+            for (let key in match) {
+                if (match[key] === undefined) {
+                    console.log("ERROR: field " + key + " missing in match " + oddsportalUrl);
+                    failedValidation = true;
+                }
+            }
+            if (failedValidation) continue;
             if (scoresField.textContent !== "-") {
                 match.actlHomeTeamScore = actlHomeTeamScore,
                 match.actlAwayTeamScore = actlAwayTeamScore
