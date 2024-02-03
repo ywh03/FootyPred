@@ -11,9 +11,14 @@ const leaguesToScrape = [
 async function getMatchResults(matchUrl) {
     const browser = await launchPuppeteer();
     const page = await browser.newPage();
-    await page.setViewport({width: 1800, height: 2500});
-    await page.goto(matchUrl, {waitUntil: 'load'}); //use load so that ongoing match red class can be loaded
-    await page.waitForSelector('div.relative.px-\\[12px\\].flex.max-mm\\:flex-col.w-auto.min-sm\\:w-full.pb-5.pt-5.min-mm\\:items-center.font-semibold.text-\\[22px\\].text-black-main.gap-2.border-b.border-black-borders.font-secondary');
+    try {
+        await page.setViewport({width: 1800, height: 2500});
+        await page.goto(matchUrl, {waitUntil: 'load'}); //use load so that ongoing match red class can be loaded
+        await page.waitForSelector('div.relative.px-\\[12px\\].flex.max-mm\\:flex-col.w-auto.min-sm\\:w-full.pb-5.pt-5.min-mm\\:items-center.font-semibold.text-\\[22px\\].text-black-main.gap-2.border-b.border-black-borders.font-secondary');
+    } catch (err) {
+        console.log("Error in opening page: " + err);
+        return "Error in opening page";
+    }
 
     page.on('console', (message) => {
         console.log("Console message: " + message.text());

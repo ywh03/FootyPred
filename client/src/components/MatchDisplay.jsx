@@ -25,6 +25,7 @@ function MatchDisplay(props) {
         setMatchUpdating(tempMatchUpdating);
         const rawMatchResults = await axios.post('http://localhost:9000/matches', {"matchId": matchId});
         const matchResults = rawMatchResults.data;
+        if (matchResults === "Error in opening page") return;
         if (matchResults.matchStatus !== "Uncommenced") {
             props.setMatches((prevArray) => {
                 const updatedArray = [...prevArray];
