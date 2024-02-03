@@ -34,11 +34,15 @@ export default function Match(props) {
                     </div>
                 ) : (
                     <div key={props.matchDetails._id} className="match-row" onClick={togglePopup}>
-                        <div className="match-row-item match-row-remove-button">
-                            {
-                                props.isPast ? null : (<button className="remove-button btn btn-danger" onClick={delMatch}> {props.wantHidden ? "+" : "-"} </button>)
-                            }
-                        </div>
+                        {
+                            props.isPast ? null : (
+                                <div className="match-row-item match-row-remove-button">
+                                    {
+                                        props.isPast ? null : (<button className="remove-button btn btn-danger" onClick={delMatch}> {props.wantHidden ? "+" : "-"} </button>)
+                                    }
+                                </div>
+                            )
+                        }
                         {
                             props.matchDetails.matchStatus !== "Completed" && props.matchDetails.matchStatus !== "Uncommenced" ? (
                                 <p className="match-ongoing match-row-item match-row-date">{props.matchDetails.matchStatus}</p> 
