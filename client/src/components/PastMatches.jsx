@@ -3,6 +3,7 @@ import axios from "axios";
 import NavBar from "./NavBar.jsx";
 import MatchDisplay from "./MatchDisplay.jsx";
 
+//TODO: Reverse past matches display order
 export default function PastMatches() {
 
     const [isLoading, setLoading] = React.useState(true);

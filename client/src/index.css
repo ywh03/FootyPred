@@ -103,6 +103,16 @@ code {
   color: black;
 }
 
+.add-button {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: #208c36;
+  border: #208c36;
+  color: white;
+}
+
 .match-row-date {
   flex: 1 1 400px;
 }
@@ -127,4 +137,60 @@ code {
   display: grid;
   grid-template-columns: 4fr 3fr 8fr 2fr 1fr 1fr 1fr;
   text-align: center;
+}
+
+/* ================ LEAGUE ROW ================= */
+.league-table {
+  padding: 2%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.league-row {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.league-row-item {
+  margin-bottom: 0px;
+  padding: 0.5rem 0px;
+}
+
+.league-row-remove-button {
+  flex: 1 1 100px;
+}
+
+.league-row-alias {
+  flex: 1 1 300px;
+}
+
+.league-row-status {
+  flex: 1 1 150px;
+}
+
+.league-columns {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+}
+
+.league-column {
+  width: 40vw;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: space-around;
+}
+
+.league-column-title {
+  align-self: center;
+}
+
+.league-table-headers>p {
+  font-weight: 600;
 }

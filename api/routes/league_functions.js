@@ -7,7 +7,7 @@ const leagueSchema = new mongoose.Schema ({
     _id: String, //leagueName hyphenated e.g. premier-league
     alias: String, // Premier League, La Liga etc.
     followStatus: {
-        type: String, //auto-in, auto-out, no-scrape
+        type: String, //default-in, default-out, no-scrape
         default: "no-scrape",
     },
     oddsportalUrl: String
@@ -59,6 +59,7 @@ async function changeLeagueFollowStatus(leagueId, newStatus) {
     }
 }
 
+//TODO: Add response codes to everything
 router.get('/', async function (req, res, next) {
     try {
         const allLeagues = await getAllLeagues();
@@ -74,9 +75,9 @@ router.post('/updateStatus', async function (req, res, next) {
     const newStatus = req.body.newStatus;
     const updateSuccess = await changeLeagueFollowStatus(leagueId, newStatus);
     if (updateSuccess === "Success") {
-        res.send("League status successfully updated");
+        res.json({responseCode: 201});
     } else {
-        res.send("League status unable to be updated");
+        res.json({responseCode: 500});
     }
 })
 
