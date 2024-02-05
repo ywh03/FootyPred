@@ -39,13 +39,14 @@ export default function FollowedLeagues () {
                 ) : (
                     <div>
                         <div className="league-columns">
-                            <div className="league-column">
+                            <div className="league-column league-column-active">
                                 <h2 className="league-column-title">Active Leagues</h2>
                                 <div className="league-table">
                                     <div className="league-row league-table-headers">
                                         <p className="league-row-item league-row-remove-button">Remove</p>
                                         <p className="league-row-item league-row-alias">League</p>
                                         <p className="league-row-item league-row-status">Status</p>
+                                        <p className="league-row-item league-row-toggle-button">Toggle Default</p>
                                     </div>
                                     {
                                         allLeagues.map(function(league, index) {
@@ -58,7 +59,7 @@ export default function FollowedLeagues () {
                                     }
                                 </div>
                             </div>
-                            <div className="league-column">
+                            <div className="league-column league-column-available">
                                 <h2 className="league-column-title">Available Leagues</h2>
                                 <div className="league-table">
                                     <div className="league-row league-table-headers">

@@ -113,6 +113,16 @@ code {
   color: white;
 }
 
+.toggle-button {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: #c9c9c9;
+  border: #c9c9c9;
+  color: black;
+}
+
 .match-row-date {
   flex: 1 1 400px;
 }
@@ -173,6 +183,10 @@ code {
   flex: 1 1 150px;
 }
 
+.league-row-toggle-button {
+  flex: 1 1 150px;
+}
+
 .league-columns {
   display: flex;
   flex-flow: row wrap;
@@ -180,15 +194,22 @@ code {
 }
 
 .league-column {
-  width: 40vw;
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: column wrap;
   justify-content: flex-start;
   align-items: space-around;
 }
 
 .league-column-title {
   align-self: center;
+}
+
+.league-column-active {
+  width: 50vw;
+}
+
+.league-column-available {
+  width: 40vw;
 }
 
 .league-table-headers>p {
