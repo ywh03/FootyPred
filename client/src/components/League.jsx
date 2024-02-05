@@ -3,6 +3,14 @@ import axios from 'axios';
 
 export default function League(props) {
 
+    function parseHyphen(text) {
+        const parsedText = text.split('-').map((word) => {
+            const capWord = word.charAt(0).toUpperCase() + word.slice(1);
+            return capWord;
+        }).join(' ');
+        return parsedText;
+    }
+
     async function toggleLeagueStatus (event) {
         const leagueId = props.leagueDetails._id;
         event.stopPropagation();
@@ -43,7 +51,7 @@ export default function League(props) {
             }
             </div>
             <p className="league-row-item league-row-alias">{props.leagueDetails.alias}</p>
-            <p className="league-row-item league-row-status">{props.leagueDetails.followStatus}</p>
+            <p className="league-row-item league-row-status">{parseHyphen(props.leagueDetails.followStatus)}</p>
             {
                 props.leagueDetails.followStatus === "no-scrape" ? null : (
                     <div className="league-row-item league-row-toggle-button">
