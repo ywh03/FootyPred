@@ -4,25 +4,33 @@ import { convertLeagueNameToFull } from "./GeneralUtilities.js";
 
 export default function UpdateButton(props) {
 
-    const leaguesToScrape = [
-        "premier-league",
-        "bundesliga",
-        "laliga",
-        "champions-league"
-    ];
-
     const [isUpdating, setUpdating] = React.useState(false);
     const [nowScraping, setNowScraping] = React.useState();
 
+    async function getLeagues() {
+        setNowScraping("Leagues Database");
+        const response = await axios.get('http://localhost:9000/leagues');
+        if (response.data.statusCode === 500) {
+            console.log("Server error getting all leagues");
+            return;
+        }
+        return response.data.leagues;
+    }
+
     async function updateNextMatches() {
+        const allLeagues = await getLeagues();
         setUpdating(true);
         let allMatches = [];
-        for (const league of leaguesToScrape) {
-            setNowScraping(convertLeagueNameToFull(league));
+        for (const league of allLeagues) {
+            if (league.followStatus === "no-scrape") continue;
+            setNowScraping(league.alias);
             const params = {
-                league: league,
+                league: league._id,
             }
             const nextMatches = await axios.get('http://localhost:9000/scrape/nextMatches', { params } );
+            for (const match of nextMatches.data) {
+                match["hidden"] = league.followStatus === "default-in" ? false : true;
+            }
             allMatches.push(...nextMatches.data);
         }
         setNowScraping();

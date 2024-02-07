@@ -9,8 +9,12 @@ export default function FollowedLeagues () {
     const [isLeaguesLoading, setLeaguesLoading] = React.useState(true);
 
     async function getAllLeagues() {
-        const leagues = await axios.get('http://localhost:9000/leagues');
-        setAllLeagues(leagues.data);
+        const response = await axios.get('http://localhost:9000/leagues');
+        if (response.data.statusCode === 500) {
+            console.log("Server error in getting all leagues");
+            return;
+        }
+        setAllLeagues(response.data.leagues);
         setLeaguesLoading(false);
     }
 

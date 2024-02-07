@@ -44,7 +44,7 @@ code {
 
 .update-button {
   float: right;
-  display: inline;
+  clear: right;
   padding: 1% 3%;
 }
 

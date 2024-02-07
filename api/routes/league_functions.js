@@ -63,10 +63,10 @@ async function changeLeagueFollowStatus(leagueId, newStatus) {
 router.get('/', async function (req, res, next) {
     try {
         const allLeagues = await getAllLeagues();
-        res.send(allLeagues);
+        res.json({statusCode: 200, leagues: allLeagues});
     } catch (err) {
         console.log("Error getting all leagues: " + err);
-        res.send("Error getting all leagues");
+        res.json({statusCode: 500});
     }
 })
 

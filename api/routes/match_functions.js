@@ -26,7 +26,7 @@ const matchSchema = new mongoose.Schema({
     matchStatus: String,
     hidden: {
         type: Boolean, 
-        default: false,
+        //default: false,
     }
 })
 
@@ -41,7 +41,7 @@ function getOffsetCurrentISODate(offsetDays) {
     return offsetDate.toISOString();
 }
 
-async function newMatch(scrapedAt, date, homeTeam, awayTeam, homeProb, drawProb, awayProb, leagueName, oddsportalUrl, actlHomeScore, actlAwayScore) {
+async function newMatch(scrapedAt, date, homeTeam, awayTeam, homeProb, drawProb, awayProb, leagueName, oddsportalUrl, hidden, actlHomeScore, actlAwayScore) {
     const customId = `${date}-${homeTeam}-${awayTeam}`;
     const match = new Match({
         _id: customId,
@@ -54,7 +54,8 @@ async function newMatch(scrapedAt, date, homeTeam, awayTeam, homeProb, drawProb,
         date: date,
         scrapedAt: scrapedAt,
         oddsportalUrl: oddsportalUrl,
-        matchStatus: "Uncommenced"
+        matchStatus: "Uncommenced",
+        hidden: hidden,
     })
     if (actlHomeScore !== undefined && actlAwayScore !== undefined) {
         match.actlHomeScore = actlHomeScore;
@@ -190,7 +191,7 @@ router.post('/checkMatchesAndAdd', async function(req, res, next) {
                 console.log("Match missing probs: " + match.date + match.homeTeam + match.awayTeam);
                 continue;
             }
-            else await newMatch(match.scrapedAt, match.date, match.homeTeam, match.awayTeam, match.homeProb, match.drawProb, match.awayProb, match.leagueName, match.oddsportalUrl);
+            else await newMatch(match.scrapedAt, match.date, match.homeTeam, match.awayTeam, match.homeProb, match.drawProb, match.awayProb, match.leagueName, match.oddsportalUrl, match.hidden);
         }
         return res.send({"status": "Matches successfully added to database."});
     } catch (err) {
