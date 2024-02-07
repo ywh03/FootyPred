@@ -21,6 +21,7 @@ export default function UpdateButton(props) {
         const allLeagues = await getLeagues();
         setUpdating(true);
         let allMatches = [];
+        let errorLeagues = [];
         for (const league of allLeagues) {
             if (league.followStatus === "no-scrape") continue;
             setNowScraping(league.alias);
@@ -28,12 +29,22 @@ export default function UpdateButton(props) {
                 league: league._id,
             }
             const nextMatches = await axios.get('http://localhost:9000/scrape/nextMatches', { params } );
-            for (const match of nextMatches.data) {
+            console.log(nextMatches.data);
+            if (nextMatches.data.statusCode === 500) {
+                errorLeagues.push(league.alias);
+                continue;
+            }
+            for (const match of nextMatches.data.matches) {
                 match["hidden"] = league.followStatus === "default-in" ? false : true;
             }
-            allMatches.push(...nextMatches.data);
+            allMatches.push(...nextMatches.data.matches);
         }
-        setNowScraping();
+        if (errorLeagues.length > 0) {
+            setNowScraping();
+        } else {
+            setNowScraping("Errors scraping: " + errorLeagues.join(", "));
+        }
+        
         console.log("Next matches found; adding next");
         //console.log(nextMatches.data);
         const matchUpdateStatus = await axios.post('http://localhost:9000/matches/checkMatchesAndAdd', {matches: allMatches});

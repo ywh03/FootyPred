@@ -90,10 +90,15 @@ async function getMatches(league, type) {
     else leagueUrl = oddsportalLeaguesUrlsMap[league] + "/results/";
     const browser = await launchPuppeteer();
     const page = await browser.newPage();
-    await page.setViewport({width: 1800, height: 2500});
-    await page.goto(leagueUrl, {waitUntil: 'load'});
-    //await page.waitForSelector('div.eventRow.flex.w-full.flex-col.text-xs');
-    console.log("League loaded " + leagueUrl);
+    try {
+        await page.setViewport({width: 1800, height: 2500});
+        await page.goto(leagueUrl, {waitUntil: 'load'});
+        //await page.waitForSelector('div.eventRow.flex.w-full.flex-col.text-xs');
+        console.log("League loaded " + leagueUrl);
+    } catch (err) {
+        console.log("Error in opening page: " + err);
+        return "Error in opening page";
+    }
 
     page.on('console', (message) => {
         console.log("Console message: " + message.text());
@@ -233,7 +238,8 @@ router.get('/nextMatches', async function(req, res, next) {
     }
     */
     const matches = await getMatches(league, "nextMatches");
-    res.json(matches);
+    if (matches === "Error in opening page") res.json({statusCode: 500});
+    else res.json({statusCode: 500, matches: matches});
 })
 
 router.get('/results', async function(req, res, next) {
