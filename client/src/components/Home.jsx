@@ -27,11 +27,13 @@ export default function Home() {
     return (
         <div>
             <NavBar />
-            <h1 className="page-title">Upcoming Matches</h1>
-            <UpdateButton pageMatchUpdate={getUpcomingMatches} />
+            <div className="top-bar-with-button">
+                <h1 className="page-title">Upcoming Matches</h1>
+                <UpdateButton pageMatchUpdate={getUpcomingMatches} />
+            </div>
             {
                 isLoading ? (
-                    <h2>Matches Loading...</h2>
+                    <h2 className="matches-loading-prompt">Matches Loading...</h2>
                 ) : (
                     <MatchDisplay isPast={false} wantHidden={false} matches={upcomingMatches} setMatches={setUpcomingMatches} />
                 )

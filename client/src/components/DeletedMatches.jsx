@@ -23,11 +23,13 @@ export default function DeletedMatches() {
     return (
         <div>
             <NavBar />
-            <h1 className="page-title">Deleted Matches</h1>
-            <UpdateButton pageMatchUpdate={getDeletedMatches} />
+            <div className="top-bar-with-button">
+                <h1 className="page-title">Deleted Matches</h1>
+                <UpdateButton pageMatchUpdate={getDeletedMatches} />
+            </div>
             {
                 isLoading ? (
-                    <h2>Matches Loading...</h2>
+                    <h2 className="matches-loading-prompt">Matches Loading...</h2>
                 ) : (
                     <MatchDisplay isPast={false} wantHidden={true} matches={deletedMatches} setMatches={setDeletedMatches} />
                 )

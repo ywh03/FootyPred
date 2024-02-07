@@ -30,7 +30,6 @@ router.get('/', async function (req, res) {
     const teamStats = {};
     for (const match of allMatches) {
         if (match.actlHomeScore === undefined) continue;
-        console.log(match.actlHomeScore);
         const matchReturn = winReturn(match.actlHomeScore, match.actlAwayScore, match.predHomeScore, match.predAwayScore, match.homeProb, match.drawProb, match.awayProb);
         const exactReturn = isScoreCorrect(match.actlHomeScore, match.actlAwayScore, match.predHomeScore, match.predAwayScore);
         const matchLeague = match.leagueName;

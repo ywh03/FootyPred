@@ -36,6 +36,10 @@ code {
   color: crimson;
 }
 
+.matches-loading-prompt {
+  padding: 0% 3%;
+}
+
 /* ======================== HEADINGS AND UPDATE BUTTON ====================== */
 .page-title {
   padding: 1% 3%;
@@ -43,9 +47,17 @@ code {
 }
 
 .update-button {
-  float: right;
-  clear: right;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-self: right;
+  align-items: flex-end;
   padding: 1% 3%;
+}
+
+.top-bar-with-button {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
 }
 
 /* ========== PREDICTION FORM ==============*/
