@@ -12,7 +12,7 @@ export default function DeletedMatches() {
 
     async function getDeletedMatches() {
         const rawDeletedMatches = await axios.get('http://localhost:9000/matches/deletedmatches');
-        setDeletedMatches(rawDeletedMatches.data);
+        setDeletedMatches(rawDeletedMatches.data.reverse());
         setLoading(false);
     }
 
