@@ -53,7 +53,7 @@ function MatchDisplay(props) {
             }
         }
         return;
-    }ac
+    }
 
     async function toggleMatch(matchId, index) {
         await axios.post('http://localhost:9000/matches/toggleMatch', {"matchId": matchId, "updatedHidden": !props.wantHidden});
