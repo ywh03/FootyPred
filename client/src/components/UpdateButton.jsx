@@ -40,12 +40,11 @@ export default function UpdateButton(props) {
             allMatches.push(...nextMatches.data.matches);
         }
         if (errorLeagues.length > 0) {
-            setNowScraping();
-        } else {
             setNowScraping("Errors scraping: " + errorLeagues.join(", "));
+        } else {
+            setNowScraping();
         }
         
-        console.log("Next matches found; adding next");
         //console.log(nextMatches.data);
         const matchUpdateStatus = await axios.post('http://localhost:9000/matches/checkMatchesAndAdd', {matches: allMatches});
         console.log(matchUpdateStatus.data.status);

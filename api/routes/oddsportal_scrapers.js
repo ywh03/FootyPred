@@ -136,6 +136,7 @@ async function getMatches(league, type) {
         let matches = [];
         let currentDate = null;
         const matchBlocks = document.querySelectorAll('div.eventRow.flex.w-full.flex-col.text-xs');
+        console.log(matchBlocks.length);
         for (const matchBlock of matchBlocks) {
             const dateBlocks = matchBlock.querySelector('div.border-black-borders.bg-gray-light.flex.w-full.min-w-0.border-l.border-r');
             if (dateBlocks) {
@@ -239,7 +240,7 @@ router.get('/nextMatches', async function(req, res, next) {
     */
     const matches = await getMatches(league, "nextMatches");
     if (matches === "Error in opening page") res.json({statusCode: 500});
-    else res.json({statusCode: 500, matches: matches});
+    else res.json({statusCode: 200, matches: matches});
 })
 
 router.get('/results', async function(req, res, next) {

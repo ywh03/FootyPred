@@ -43,6 +43,7 @@ function getOffsetCurrentISODate(offsetDays) {
 
 async function newMatch(scrapedAt, date, homeTeam, awayTeam, homeProb, drawProb, awayProb, leagueName, oddsportalUrl, hidden, actlHomeScore, actlAwayScore) {
     const customId = `${date}-${homeTeam}-${awayTeam}`;
+    console.log("Attempting to add match " + customId);
     const match = new Match({
         _id: customId,
         homeTeam: homeTeam,
@@ -127,7 +128,6 @@ async function getUpdatedMatchScore(matchId) {
         _id: matchId,
     }
     const match = await Match.findOne(query);
-    console.log(match);
     const oddsportalUrl = match.oddsportalUrl;
     console.log("Url: " + oddsportalUrl);
     const matchResults = await getMatchResults(oddsportalUrl);
