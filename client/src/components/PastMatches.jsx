@@ -11,7 +11,15 @@ export default function PastMatches() {
 
     async function getPastMatches() {
         const rawPastMatches = await axios.get('http://localhost:9000/matches/pastmatches');
-        setPastMatches(rawPastMatches.data);
+        let pastMatches = [];
+        for (const match of rawPastMatches.data) {
+            if (!match.hasOwnProperty('predHomeScore')) {
+                axios.post('http://localhost:9000/matches/toggleMatch', {matchId: match._id, hidden: true});
+            } else {
+                pastMatches.push(match);
+            }
+        }
+        setPastMatches(pastMatches.reverse());
         setLoading(false);
     }
 

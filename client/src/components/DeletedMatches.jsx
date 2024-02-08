@@ -4,7 +4,7 @@ import NavBar from "./NavBar.jsx";
 import UpdateButton from "./UpdateButton.jsx";
 import MatchDisplay from "./MatchDisplay.jsx";
 
-//TODO: remove deleted matches that have already passed
+//XXX: remove deleted matches that have already passed
 
 export default function DeletedMatches() {
     const [isLoading, setLoading] = React.useState(true);

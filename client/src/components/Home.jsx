@@ -4,7 +4,6 @@ import NavBar from "./NavBar.jsx";
 import UpdateButton from "./UpdateButton.jsx";
 import MatchDisplay from "./MatchDisplay.jsx";
 
-//TODO: Insert match via oddsportal link (or implement search functionality)
 //TODO: Implement an importer from CSV
 //TODO: Reload button on individual matches to check if they are ongoing / should I make it to search odds
 
@@ -17,8 +16,6 @@ export default function Home() {
         setUpcomingMatches(rawUpcomingMatches.data);
         setLoading(false);
     }
-
-    //TODO: Not searching for match results anymore
 
     React.useEffect(() => {
         getUpcomingMatches();

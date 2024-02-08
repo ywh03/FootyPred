@@ -18,7 +18,6 @@ function MatchDisplay(props) {
         return false;
     }
 
-    //FIXME: Make sure to not push unfinished matches into the database; also make the match result span red when match is ongoing
     async function updateMatch(matchId, index) {
         let tempMatchUpdating = {...isMatchUpdating};
         tempMatchUpdating[index] = true;
@@ -43,23 +42,19 @@ function MatchDisplay(props) {
         setMatchUpdating(tempMatchUpdating);
     }
 
-    //TODO: Reintegrate this function
     async function checkMatchesForUpdates() {
         //console.log(allMatches.data);
         for (const [index, match] of props.matches.entries()) {
             console.log(match);
             const matchDate = match.date;
-            //FIXME: Need to check if the match has ended, not enough match has actlHomeScore
             if (compareDate(matchDate) && match.matchStatus !== "Completed") {
                 console.log(match);
                 await updateMatch(match._id, index);
             }
         }
         return;
-    }
+    }ac
 
-    //TODO: fix toggling not automatically updating the list issue
-    //TODO: Investigate mysterious disappearance of hidden status
     async function toggleMatch(matchId, index) {
         await axios.post('http://localhost:9000/matches/toggleMatch', {"matchId": matchId, "updatedHidden": !props.wantHidden});
         console.log("Match " + matchId + " hidden in database");

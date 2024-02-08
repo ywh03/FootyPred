@@ -59,7 +59,6 @@ async function changeLeagueFollowStatus(leagueId, newStatus) {
     }
 }
 
-//TODO: Add response codes to everything
 router.get('/', async function (req, res, next) {
     try {
         const allLeagues = await getAllLeagues();

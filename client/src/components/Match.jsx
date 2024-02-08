@@ -2,8 +2,6 @@ import React from "react";
 import MatchPopup from "./MatchPopup";
 import { convertLeagueNameToFull } from "./GeneralUtilities.js";
 
-//TODO: Remove match button to remove the match (and add it to a removed match db that expires after the match occurs)
-
 export default function Match(props) {
 
     const [popupOpen, setPopupOpen] = React.useState(false);
@@ -59,7 +57,6 @@ export default function Match(props) {
                                 null
                             }
                             { props.matchDetails.hasOwnProperty('actlHomeScore') ?
-                            //TODO: Make this span red when match is ongoing
                                 <span className={props.matchDetails.matchStatus !== "Uncommenced" && props.matchDetails.matchStatus !== "Completed" ? "match-ongoing" : ""}> {props.matchDetails.actlHomeScore} - {props.matchDetails.actlAwayScore} </span> :
                                 props.isMatchUpdating === true ?
                                 null : <span> - </span>
