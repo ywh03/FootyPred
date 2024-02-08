@@ -2,35 +2,20 @@ import React from "react";
 
 export default function StatsHeaderRow(props) {
     return (
-        <div>
+        <div className="stats-row stats-table-header">
             {
-                props.type === "overall" ? (
-                    <div className="stats-row-overall">
-                        <p>Correct 1X2 Predictions</p>
-                        <p>Wrong 1X2 Predictions</p>
-                        <p>Exact Score Predictions</p>
-                        <p>Total Gain</p>
-                        <p>Net Gain</p>
-                        <p>Total Score</p>
-                    </div>
-                ) : (
-                    <div className="stats-row">
-                        {
-                            props.type === "league" ? (
-                                <p>League</p>
-                            ) : (
-                                <p>Team</p>
-                            )
-                        }
-                        <p>Correct 1X2 Predictions</p>
-                        <p>Wrong 1X2 Predictions</p>
-                        <p>Exact Score Predictions</p>
-                        <p>Total Gain</p>
-                        <p>Net Gain</p>
-                        <p>Total Score</p>
-                    </div>
-                )
+                props.type === "league" ? (
+                    <p className="stats-row-type">League</p>
+                ) : props.type === "team" ? (
+                    <p className="stats-row-type">Team</p>
+                ) : null
             }
+            <p className="stats-row-correct-pred">Correct Predictions</p>
+            <p className="stats-row-wrong-pred">Wrong Predictions</p>
+            <p className="stats-row-exact-pred">Exact Predictions</p>
+            <p className="stats-row-total-gain">Total Gain</p>
+            <p className="stats-row-net-gain">Net Gain</p>
+            <p className="stats-row-total-score">Total Score</p>
         </div>
     )
 }

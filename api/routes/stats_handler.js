@@ -67,17 +67,17 @@ router.get('/', async function (req, res) {
         }
         if (matchReturn) {
             overallStats.correctWins += 1;
-            overallStats.totalGain += matchReturn;
-            overallStats.netGain += matchReturn;
+            overallStats.totalGain += matchReturn - 1;
+            overallStats.netGain += matchReturn - 1;
             leagueStats[matchLeague].correctWins += 1;
-            leagueStats[matchLeague].totalGain += matchReturn;
-            leagueStats[matchLeague].netGain += matchReturn;
+            leagueStats[matchLeague].totalGain += matchReturn - 1;
+            leagueStats[matchLeague].netGain += matchReturn - 1;
             teamStats[matchHomeTeam].correctWins += 1;
-            teamStats[matchHomeTeam].totalGain += matchReturn;
-            teamStats[matchHomeTeam].netGain += matchReturn;
+            teamStats[matchHomeTeam].totalGain += matchReturn - 1;
+            teamStats[matchHomeTeam].netGain += matchReturn - 1;
             teamStats[matchAwayTeam].correctWins += 1;
-            teamStats[matchAwayTeam].totalGain += matchReturn;
-            teamStats[matchAwayTeam].netGain += matchReturn;
+            teamStats[matchAwayTeam].totalGain += matchReturn - 1;
+            teamStats[matchAwayTeam].netGain += matchReturn - 1;
         } else {
             overallStats.wrongWins += 1;
             overallStats.netGain -= 1;
