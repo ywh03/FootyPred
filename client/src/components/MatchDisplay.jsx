@@ -92,12 +92,11 @@ function MatchDisplay(props) {
             <div>
             { props.matches.map(function(match, index) {
                 return (
-                    <div>
+                    <div className={index % 2 === 0 ? "match-row-grey" : "match-row-white"}>
                     {
                         match ? <Match matchDetails={match} index={index} removeMatch={toggleMatch} isMatchUpdating={isMatchUpdating[index]} wantHidden={props.wantHidden} isPast={props.isPast} /> : null
                     }
                     </div>
-                    //TODO: remove first column buttons for isPast
                 )
             })}
             </div>
