@@ -6,6 +6,8 @@ import MatchDisplay from "./MatchDisplay.jsx";
 
 //XXX: remove deleted matches that have already passed
 
+//TODO: Wrong order of matches
+//TODO: Label finished matches (?)
 export default function DeletedMatches() {
     const [isLoading, setLoading] = React.useState(true);
     const [deletedMatches, setDeletedMatches] = React.useState();

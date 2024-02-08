@@ -8,6 +8,7 @@ export default function StatsDisplay() {
     const [stats, setStats] = React.useState({});
 
     //TODO: Graph of gain over time
+    //TODO: Search functionality (esp for teams)
 
     async function getAllStats() {
         const rawAllStats = await axios.get("http://localhost:9000/stats");
