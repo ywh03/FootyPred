@@ -77,7 +77,7 @@ export default function Match(props) {
             <div>
                 {
                     popupOpen ? (
-                        <MatchPopup matchId={props.matchDetails._id} homeTeam={props.matchDetails.homeTeam} awayTeam={props.matchDetails.awayTeam}/>
+                        <MatchPopup matchId={props.matchDetails._id} homeTeam={props.matchDetails.homeTeam} awayTeam={props.matchDetails.awayTeam} setMatches={props.setMatches} togglePopup={togglePopup} index={props.index} />
                     ) : null
                 }
             </div>

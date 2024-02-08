@@ -175,8 +175,10 @@ router.post('/updatepred', async function(req, res, next) {
     const predAwayScore = req.body.predAwayScore;
     try {
         await addPredictions(matchId, predHomeScore, predAwayScore);
+        res.json({statusCode: 200});
     } catch (err) {
         console.log("Error adding predictions: " + err);
+        res.json({statusCode: 500});
     }
 })
 

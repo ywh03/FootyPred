@@ -94,7 +94,7 @@ function MatchDisplay(props) {
                 return (
                     <div className={index % 2 === 0 ? "match-row-grey" : "match-row-white"}>
                     {
-                        match ? <Match matchDetails={match} index={index} removeMatch={toggleMatch} isMatchUpdating={isMatchUpdating[index]} wantHidden={props.wantHidden} isPast={props.isPast} /> : null
+                        match ? <Match matchDetails={match} index={index} removeMatch={toggleMatch} isMatchUpdating={isMatchUpdating[index]} wantHidden={props.wantHidden} isPast={props.isPast} setMatches={props.setMatches} /> : null
                     }
                     </div>
                 )
