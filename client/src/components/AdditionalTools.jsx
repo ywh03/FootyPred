@@ -37,33 +37,42 @@ export default function AdditionalTools() {
         <div>
             <NavBar />
             <h1 className="page-title">Additional Tools</h1>
-            <h3>Manually Add Match</h3>
-            <form onSubmit={submitMatchUrl}>
-                <label htmlFor="oddsportalUrl">Match Oddsportal URL</label>
-                <input type="text" name="matchOddsportalUrl" />
-                <button type="submit">Submit</button>
-            </form>
-            {
-                isMatchSearching === 1 ? (
-                    <p>Searching for match...</p>
-                ) : isMatchSearching === 2 ? (
-                    <p>{matchSearchResult}</p>
-                ) : null
-            }
-            <form onSubmit={submitLeagueUrl} >
-                <label htmlFor="leagueOddsportalUrl">League Oddsportal URL</label>
-                <input type="text" name="leagueOddsportalUrl" />
-                <label htmlFor="leagueAlias">League Alias</label>
-                <input type="text" name="leagueAlias" />
-                <button type="submit">Submit</button>
-            </form>
-            {
-                isLeagueSearching === 1 ? (
-                    <p>Adding league...</p>
-                ) : isMatchSearching === 2 ? (
-                    <p>{leagueSearchResult}</p>
-                ) : null
-            }
+            <div className="add-tools-section">
+                <h3 className="add-tools-section-title">Manually Add Match</h3>
+                <form onSubmit={submitMatchUrl}>
+                    <label htmlFor="oddsportalUrl">Match Oddsportal URL: </label>
+                    <input type="text" className="form-control" name="matchOddsportalUrl" placeholder="Match URL" />
+                    <button className="btn btn-success add-tools-button" type="submit">Submit</button>
+                </form>
+                {
+                    isMatchSearching === 1 ? (
+                        <p>Searching for match...</p>
+                    ) : isMatchSearching === 2 ? (
+                        <p>{matchSearchResult}</p>
+                    ) : null
+                }
+            </div>
+            <div className="add-tools-section">
+                <h3 className="add-tools-section-title">Manually Add League</h3>
+                <form onSubmit={submitLeagueUrl} >
+                    <div className="form-group">
+                        <label htmlFor="leagueOddsportalUrl">League Oddsportal URL: </label>
+                        <input type="text" className="form-control" name="leagueOddsportalUrl" placeholder="League URL" />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="leagueAlias">League Alias: </label>
+                        <input type="text" className="form-control" name="leagueAlias" placeholder="League Alias" />
+                    </div>
+                    <button className="btn btn-success add-tools-button" type="submit">Submit</button>
+                </form>
+                {
+                    isLeagueSearching === 1 ? (
+                        <p>Adding league...</p>
+                    ) : isMatchSearching === 2 ? (
+                        <p>{leagueSearchResult}</p>
+                    ) : null
+                }
+            </div>
         </div>
     )
 }
