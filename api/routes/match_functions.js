@@ -254,16 +254,18 @@ router.get('/deletedMatches', async function(req, res, next) {
 
 router.post('/addMatchViaUrl', async function(req, res, next) {
     console.log("Request to add match via url received");
-    const match = await getMatchResults(req.body.url);
+    let match = await getMatchResults(req.body.url);
+    if (match === "Error in opening page") return res.send("Error adding match");
+    match["hidden"] = false;
     console.log("Match details obtained, passing to add match");
     const matchFromDB = await queryMatch(match.date, match.homeTeam, match.awayTeam);
     console.log(matchFromDB);
     if (matchFromDB) res.send("Match already in database");
     else if (match.hasOwnProperty("actlHomeTeamScore")){
-        await newMatch(match.scrapedAt, match.date, match.homeTeam, match.awayTeam, match.homeProb, match.drawProb, match.awayProb, match.leagueName, match.oddsportalUrl, match.actlHomeTeamScore, match.actlAwayTeamScore);
+        await newMatch(match.scrapedAt, match.date, match.homeTeam, match.awayTeam, match.homeProb, match.drawProb, match.awayProb, match.leagueName, match.oddsportalUrl, match.hidden, match.actlHomeTeamScore, match.actlAwayTeamScore);
         res.send("Match with scores added to database");
     } else {
-        await newMatch(match.scrapedAt, match.date, match.homeTeam, match.awayTeam, match.homeProb, match.drawProb, match.awayProb, match.leagueName, match.oddsportalUrl);
+        await newMatch(match.scrapedAt, match.date, match.homeTeam, match.awayTeam, match.homeProb, match.drawProb, match.awayProb, match.leagueName, match.oddsportalUrl, match.hidden);
         res.send("Match added to database");
     }
 })
